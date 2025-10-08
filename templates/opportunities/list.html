@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse Opportunities - Volunteer Match{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h1>Volunteer Opportunities</h1>
+        <p class="lead">Find meaningful ways to give back to your community</p>
+    </div>
+</div>
+
+{% if opportunities %}
+    <div class="row">
+        {% for opportunity in opportunities %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ opportunity.title }}</h5>
+                    <p class="card-text text-muted">
+                        <small>
+                            <i class="bi bi-building"></i> {{ opportunity.organization.organization_profile.organization_name }}
+                        </small>
+                    </p>
+                    <p class="card-text">{{ opportunity.description|truncatewords:20 }}</p>
+
+                    <ul class="list-unstyled small">
+                        <li><strong>Location:</strong> {{ opportunity.location }}</li>
+                        <li><strong>Start Date:</strong> {{ opportunity.start_date }}</li>
+                        <li><strong>Hours:</strong> {{ opportunity.hours_required }} hours</li>
+                        <li><strong>Spots:</strong> {{ opportunity.spots_available }} available</li>
+                    </ul>
+
+                    {% if opportunity.required_skills %}
+                    <div class="mb-2">
+                        <small class="text-muted">Required Skills:</small><br>
+                        {% for skill in opportunity.required_skills %}
+                            <span class="badge bg-secondary">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent">
+                    <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn btn-primary btn-sm w-100">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <h4>No opportunities available yet</h4>
+        <p>Check back soon for new volunteer opportunities!</p>
+    </div>
+{% endif %}
+{% endblock %}
