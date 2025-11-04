@@ -1,0 +1,15 @@
+{% extends "accounts/register_base.html" %}
+{% block title %}Admin Sign Up{% endblock %}
+{% block content %}
+<h1>Admin Sign Up</h1>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% for e in field.errors %}<div class="err">{{ e }}</div>{% endfor %}
+  {% endfor %}
+  <button type="submit">Create admin account</button>
+</form>
+{% endblock %}

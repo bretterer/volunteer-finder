@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}Register{% endblock %}</title>
+  <style>
+    body { font-family: system-ui,sans-serif; margin: 2rem; }
+    .nav { text-align:center; margin-bottom: 1rem; }
+    .nav a { margin: 0 .5rem; }
+    .card{ max-width:520px;margin:0 auto;padding:1.5rem;border:1px solid #ddd;border-radius:12px;}
+    label{display:block;margin-top:.75rem;}
+    input,button{width:100%;padding:.6rem;margin-top:.25rem;}
+    .err{color:#b00020;margin-top:.25rem;}
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="{% url 'register_volunteer' %}">Volunteer</a> |
+    <a href="{% url 'register_org' %}">Organization</a> |
+    <a href="{% url 'register_admin' %}">Admin</a>
+  </div>
+  <div class="card">
+    {% block content %}{% endblock %}
+  </div>
+</body>
+</html>
