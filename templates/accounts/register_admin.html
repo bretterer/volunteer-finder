@@ -1,15 +1,20 @@
 {% extends "accounts/register_base.html" %}
 {% block title %}Admin Sign Up{% endblock %}
+{% block nav_admin %}class="active"{% endblock %}
 {% block content %}
 <h1>Admin Sign Up</h1>
+<p style="text-align: center; color: #718096; margin-bottom: 1.5rem;">Create an administrator account</p>
 <form method="post" novalidate>
   {% csrf_token %}
   {{ form.non_field_errors }}
   {% for field in form %}
     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
     {{ field }}
+    {% if field.help_text %}
+      <span class="helptext">{{ field.help_text }}</span>
+    {% endif %}
     {% for e in field.errors %}<div class="err">{{ e }}</div>{% endfor %}
   {% endfor %}
-  <button type="submit">Create admin account</button>
+  <button type="submit">Create Admin Account</button>
 </form>
 {% endblock %}

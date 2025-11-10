@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volunteer Finder - Connect. Serve. Make a Difference.</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.6;
+      color: #2d3748;
+    }
+
+    /* Navigation */
+    .top-nav {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: flex-end;
+      z-index: 10;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-links a.nav-btn {
+      background: white;
+      color: #667eea;
+      padding: 0.5rem 1.5rem;
+    }
+
+    .nav-links a.nav-btn:hover {
+      background: #f7fafc;
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+      max-width: 700px;
+      opacity: 0.95;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Features Section */
+    .features {
+      padding: 5rem 2rem;
+      background: #f7fafc;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .features h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .features-subtitle {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #718096;
+      margin-bottom: 4rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.07);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .feature-card p {
+      color: #718096;
+      line-height: 1.7;
+    }
+
+    /* How It Works Section */
+    .how-it-works {
+      padding: 5rem 2rem;
+      background: white;
+    }
+
+    .how-it-works-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-top: 4rem;
+    }
+
+    .step {
+      text-align: center;
+      position: relative;
+    }
+
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    }
+
+    .step h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: #2d3748;
+    }
+
+    .step p {
+      color: #718096;
+      line-height: 1.7;
+    }
+
+    /* Stats Section */
+    .stats {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 4rem 2rem;
+      color: white;
+    }
+
+    .stats-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    footer {
+      background: #2d3748;
+      color: white;
+      padding: 3rem 2rem 2rem;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h4 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .footer-section ul {
+      list-style: none;
+    }
+
+    .footer-section ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-section a {
+      color: #cbd5e0;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-section a:hover {
+      color: white;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid #4a5568;
+      color: #cbd5e0;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .features h2,
+      .how-it-works h2 {
+        font-size: 2rem;
+      }
+
+      .stat-number {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Section -->
+  <section class="hero">
+    <nav class="top-nav">
+      <div class="nav-links">
+        {% if user.is_authenticated %}
+          <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
+          {% if user.user_type == 'volunteer' %}
+            <a href="{% url 'volunteer_dashboard' %}" class="nav-btn">Dashboard</a>
+          {% elif user.user_type == 'organization' %}
+            <a href="{% url 'opportunities:create' %}">Post Opportunity</a>
+            <a href="{% url 'organization_dashboard' %}" class="nav-btn">Dashboard</a>
+          {% elif user.user_type == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="nav-btn">Dashboard</a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register_volunteer' %}" class="nav-btn">Sign Up</a>
+        {% endif %}
+      </div>
+    </nav>
+    <h1>Volunteer Finder</h1>
+    <p>Connect volunteers with meaningful opportunities and make a lasting impact in your community</p>
+    <div class="cta-buttons">
+      <a href="{% url 'register_volunteer' %}" class="btn btn-primary">Find Opportunities</a>
+      <a href="{% url 'register_org' %}" class="btn btn-secondary">Post an Opportunity</a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features">
+    <div class="features-container">
+      <h2>Why Choose Volunteer Finder?</h2>
+      <p class="features-subtitle">Making volunteering easier for everyone</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Smart Matching</h3>
+          <p>Our intelligent system matches volunteers with opportunities based on skills, interests, and availability.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <h3>Easy Collaboration</h3>
+          <p>Organizations can easily post opportunities and connect with passionate volunteers ready to help.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Track Your Impact</h3>
+          <p>Monitor your volunteer hours, view your contributions, and see the difference you're making.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌟</div>
+          <h3>Verified Organizations</h3>
+          <p>All organizations are verified to ensure safe and legitimate volunteering opportunities.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h3>Direct Communication</h3>
+          <p>Connect directly with organizations and receive updates about your volunteer activities.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏆</div>
+          <h3>Recognition & Awards</h3>
+          <p>Earn badges and recognition for your volunteer work and community contributions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <div class="how-it-works-container">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Create Your Profile</h3>
+          <p>Sign up as a volunteer or organization and complete your profile with your interests and skills.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Browse Opportunities</h3>
+          <p>Explore volunteer opportunities that match your skills, interests, and schedule.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Connect & Serve</h3>
+          <p>Apply to opportunities, connect with organizations, and start making a difference!</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Track Your Impact</h3>
+          <p>Monitor your volunteer hours and see the positive impact you're creating in your community.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats">
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-number">500+</div>
+          <div class="stat-label">Active Volunteers</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">150+</div>
+          <div class="stat-label">Organizations</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">1,000+</div>
+          <div class="stat-label">Opportunities Posted</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">10,000+</div>
+          <div class="stat-label">Hours Volunteered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-section">
+          <h4>Volunteer Finder</h4>
+          <p>Connecting volunteers with meaningful opportunities to make a difference in their communities.</p>
+        </div>
+        <div class="footer-section">
+          <h4>For Volunteers</h4>
+          <ul>
+            <li><a href="{% url 'register_volunteer' %}">Sign Up</a></li>
+            <li><a href="{% url 'opportunities:list' %}">Browse Opportunities</a></li>
+            <li><a href="#">How It Works</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>For Organizations</h4>
+          <ul>
+            <li><a href="{% url 'register_org' %}">Register Your Org</a></li>
+            <li><a href="{% url 'opportunities:create' %}">Post Opportunity</a></li>
+            <li><a href="#">Success Stories</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Volunteer Finder - University of Michigan Dearborn. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

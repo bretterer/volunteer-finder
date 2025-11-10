@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Organization Dashboard - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .welcome {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .welcome h2 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .welcome p {
+      color: #718096;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #667eea;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      color: #2d3748;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-active {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-filled {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-expired {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .empty-state {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .empty-state h3 {
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    .opportunity-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
+      transition: all 0.2s;
+    }
+
+    .opportunity-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .opportunity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    .opportunity-header h3 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .opportunity-meta {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.9rem;
+      color: #718096;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Organization Dashboard</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:create' %}">Post Opportunity</a>
+        <a href="#">Profile</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="welcome">
+      <div>
+        <h2>{% if organization_profile %}{{ organization_profile.organization_name }}{% else %}{{ user.username }}{% endif %}</h2>
+        <p>Manage your opportunities and applications</p>
+      </div>
+      <a href="{% url 'opportunities:create' %}" class="btn">Post New Opportunity</a>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{{ total_opportunities }}</div>
+        <div class="stat-label">Total Opportunities</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ active_opportunities }}</div>
+        <div class="stat-label">Active Opportunities</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ pending_applications }}</div>
+        <div class="stat-label">Pending Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ recent_applications|length }}</div>
+        <div class="stat-label">Recent Applications</div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Recent Applications</h2>
+      </div>
+
+      {% if recent_applications %}
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Volunteer</th>
+                <th>Opportunity</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for application in recent_applications %}
+              <tr>
+                <td><strong>{{ application.volunteer.username }}</strong></td>
+                <td>{{ application.opportunity.title }}</td>
+                <td>{{ application.applied_at|date:"M d, Y" }}</td>
+                <td>
+                  <span class="status-badge status-{{ application.status }}">
+                    {{ application.get_status_display }}
+                  </span>
+                </td>
+                <td>
+                  <a href="#" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Review</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No applications yet</h3>
+          <p>When volunteers apply to your opportunities, they'll appear here</p>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Your Opportunities</h2>
+        <a href="{% url 'opportunities:create' %}" class="btn-secondary btn">Create New</a>
+      </div>
+
+      {% if opportunities %}
+        {% for opportunity in opportunities %}
+        <div class="opportunity-card">
+          <div class="opportunity-header">
+            <div>
+              <h3>{{ opportunity.title }}</h3>
+              <div class="opportunity-meta">
+                <span>📍 {{ opportunity.location }}</span>
+                <span>⏰ {{ opportunity.hours_required }} hours</span>
+                <span>👥 {{ opportunity.spots_available }} spots</span>
+                <span>📅 {{ opportunity.start_date|date:"M d, Y" }}</span>
+              </div>
+            </div>
+            <span class="status-badge status-{{ opportunity.status }}">
+              {{ opportunity.get_status_display }}
+            </span>
+          </div>
+          <p style="color: #4a5568; margin-bottom: 1rem;">{{ opportunity.description|truncatewords:30 }}</p>
+          <div style="display: flex; gap: 1rem;">
+            <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View Details</a>
+            <a href="#" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Edit</a>
+            <span style="color: #718096; align-self: center; margin-left: auto;">
+              {{ opportunity.applications.count }} application{{ opportunity.applications.count|pluralize }}
+            </span>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="empty-state">
+          <h3>No opportunities posted yet</h3>
+          <p>Create your first opportunity to start connecting with volunteers</p>
+          <a href="{% url 'opportunities:create' %}" class="btn">Post Opportunity</a>
+        </div>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>
