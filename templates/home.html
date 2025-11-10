@@ -17,6 +17,45 @@
       color: #2d3748;
     }
 
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
     /* Navigation */
     .top-nav {
       position: absolute;
@@ -25,13 +64,27 @@
       right: 0;
       padding: 1.5rem 2rem;
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
+      align-items: center;
       z-index: 10;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .logo-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .logo-text:hover {
+      opacity: 0.9;
     }
 
     .nav-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 1rem;
       align-items: center;
     }
 
@@ -39,93 +92,207 @@
       color: white;
       text-decoration: none;
       font-weight: 500;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      transition: all 0.2s;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
     }
 
     .nav-links a:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
     }
 
     .nav-links a.nav-btn {
       background: white;
       color: #667eea;
-      padding: 0.5rem 1.5rem;
+      padding: 0.6rem 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
     }
 
     .nav-links a.nav-btn:hover {
       background: #f7fafc;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     /* Hero Section */
     .hero {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 4rem 2rem;
-      text-align: center;
-      min-height: 80vh;
+      padding: 2rem;
+      min-height: 90vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Geometric pattern background */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image:
+        linear-gradient(30deg, rgba(255,255,255,0.05) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.05) 87.5%, rgba(255,255,255,0.05)),
+        linear-gradient(150deg, rgba(255,255,255,0.05) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.05) 87.5%, rgba(255,255,255,0.05)),
+        linear-gradient(30deg, rgba(255,255,255,0.05) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.05) 87.5%, rgba(255,255,255,0.05)),
+        linear-gradient(150deg, rgba(255,255,255,0.05) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.05) 87.5%, rgba(255,255,255,0.05)),
+        linear-gradient(60deg, rgba(255,255,255,0.03) 25%, transparent 25.5%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03)),
+        linear-gradient(60deg, rgba(255,255,255,0.03) 25%, transparent 25.5%, transparent 75%, rgba(255,255,255,0.03) 75%, rgba(255,255,255,0.03));
+      background-size: 80px 140px;
+      background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+    }
+
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 4rem;
+      min-height: 85vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      text-align: left;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .hero-visual {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       position: relative;
+      animation: fadeInUp 0.8s ease-out 0.2s backwards;
     }
 
-    .hero h1 {
+    .hero-illustration {
+      width: 100%;
+      max-width: 500px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+
+    .hero-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .hero-card:hover {
+      transform: translateY(-5px) scale(1.03);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .hero-card-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .hero-card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-card p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      line-height: 1.4;
+    }
+
+    .hero-text h1 {
       font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 1.5rem;
+      line-height: 1.1;
       text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .hero p {
-      font-size: 1.5rem;
-      margin-bottom: 3rem;
-      max-width: 700px;
+    .hero-text p {
+      font-size: 1.3rem;
+      margin-bottom: 2.5rem;
       opacity: 0.95;
+      line-height: 1.6;
+      max-width: 550px;
     }
 
     .cta-buttons {
       display: flex;
       gap: 1.5rem;
       flex-wrap: wrap;
-      justify-content: center;
     }
 
     .btn {
-      padding: 1rem 2.5rem;
+      padding: 1.2rem 2.8rem;
       font-size: 1.1rem;
       font-weight: 600;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: all 0.3s ease;
       display: inline-block;
       cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn > span {
+      position: relative;
+      z-index: 1;
     }
 
     .btn-primary {
       background: white;
       color: #667eea;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.2);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.15);
       color: white;
       border: 2px solid white;
       backdrop-filter: blur(10px);
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
 
     /* Features Section */
@@ -164,18 +331,42 @@
       padding: 2.5rem;
       border-radius: 16px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.07);
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
     }
 
     .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
     }
 
     .feature-icon {
-      font-size: 3rem;
+      font-size: 3.5rem;
       margin-bottom: 1.5rem;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
     }
 
     .feature-card h3 {
@@ -248,13 +439,28 @@
     /* Stats Section */
     .stats {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 4rem 2rem;
+      padding: 5rem 2rem;
       color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stats::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+      opacity: 0.3;
     }
 
     .stats-container {
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .stats-grid {
@@ -264,22 +470,49 @@
       text-align: center;
     }
 
+    .stat {
+      transition: transform 0.3s ease;
+    }
+
+    .stat:hover {
+      transform: scale(1.1);
+    }
+
     .stat-number {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: linear-gradient(180deg, #ffffff 0%, rgba(255,255,255,0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .stat-label {
       font-size: 1.1rem;
-      opacity: 0.9;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: white;
+      font-size: 2rem;
+      animation: float 2s ease-in-out infinite;
+      opacity: 0.7;
+      cursor: pointer;
     }
 
     /* Footer */
     footer {
       background: #2d3748;
       color: white;
-      padding: 3rem 2rem 2rem;
+      padding: 4rem 2rem 2rem;
     }
 
     .footer-container {
@@ -297,6 +530,7 @@
     .footer-section h4 {
       margin-bottom: 1rem;
       font-size: 1.2rem;
+      color: #ffffff;
     }
 
     .footer-section ul {
@@ -304,17 +538,19 @@
     }
 
     .footer-section ul li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
     }
 
     .footer-section a {
       color: #cbd5e0;
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: all 0.2s ease;
+      display: inline-block;
     }
 
     .footer-section a:hover {
       color: white;
+      transform: translateX(5px);
     }
 
     .footer-bottom {
@@ -324,19 +560,52 @@
       color: #cbd5e0;
     }
 
+    @media (max-width: 968px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .hero-text {
+        text-align: center;
+      }
+
+      .hero-text p {
+        max-width: 100%;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+      }
+
+      .hero-illustration {
+        max-width: 400px;
+      }
+    }
+
     @media (max-width: 768px) {
-      .hero h1 {
+      .top-nav {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .hero-text h1 {
         font-size: 2.5rem;
       }
 
-      .hero p {
-        font-size: 1.2rem;
+      .hero-text p {
+        font-size: 1.1rem;
+      }
+
+      .hero-illustration {
+        grid-template-columns: 1fr;
+        max-width: 300px;
       }
 
       .cta-buttons {
         flex-direction: column;
         width: 100%;
-        max-width: 300px;
       }
 
       .features h2,
@@ -354,6 +623,7 @@
   <!-- Hero Section -->
   <section class="hero">
     <nav class="top-nav">
+      <a href="{% url 'home' %}" class="logo-text">Volunteer Finder</a>
       <div class="nav-links">
         {% if user.is_authenticated %}
           <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
@@ -372,11 +642,41 @@
         {% endif %}
       </div>
     </nav>
-    <h1>Volunteer Finder</h1>
-    <p>Connect volunteers with meaningful opportunities and make a lasting impact in your community</p>
-    <div class="cta-buttons">
-      <a href="{% url 'register_volunteer' %}" class="btn btn-primary">Find Opportunities</a>
-      <a href="{% url 'register_org' %}" class="btn btn-secondary">Post an Opportunity</a>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1>Connect. Serve. Make a Difference.</h1>
+        <p>Join thousands of volunteers making a positive impact in their communities. Find meaningful opportunities that match your passion and skills.</p>
+        <div class="cta-buttons">
+          <a href="{% url 'register_volunteer' %}" class="btn btn-primary"><span>Find Opportunities</span></a>
+          <a href="{% url 'register_org' %}" class="btn btn-secondary"><span>Post an Opportunity</span></a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-illustration">
+          <div class="hero-card">
+            <span class="hero-card-icon">🤝</span>
+            <h3>1,000+</h3>
+            <p>Active Volunteers</p>
+          </div>
+          <div class="hero-card">
+            <span class="hero-card-icon">🏢</span>
+            <h3>200+</h3>
+            <p>Organizations</p>
+          </div>
+          <div class="hero-card">
+            <span class="hero-card-icon">📋</span>
+            <h3>500+</h3>
+            <p>Opportunities</p>
+          </div>
+          <div class="hero-card">
+            <span class="hero-card-icon">⏱️</span>
+            <h3>25,000+</h3>
+            <p>Hours Served</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -440,11 +740,6 @@
           <h3>Connect & Serve</h3>
           <p>Apply to opportunities, connect with organizations, and start making a difference!</p>
         </div>
-        <div class="step">
-          <div class="step-number">4</div>
-          <h3>Track Your Impact</h3>
-          <p>Monitor your volunteer hours and see the positive impact you're creating in your community.</p>
-        </div>
       </div>
     </div>
   </section>
@@ -464,10 +759,6 @@
         <div class="stat">
           <div class="stat-number">1,000+</div>
           <div class="stat-label">Opportunities Posted</div>
-        </div>
-        <div class="stat">
-          <div class="stat-number">10,000+</div>
-          <div class="stat-label">Hours Volunteered</div>
         </div>
       </div>
     </div>
