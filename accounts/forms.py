@@ -78,6 +78,7 @@ class AdminRegisterForm(BaseRegisterForm):
         user = super().save(commit=False)
         user.user_type = "admin"
         user.is_staff = True
+        user.is_superuser = True
         if commit:
             user.save()
         return user

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volunteer Dashboard - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .welcome {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .welcome h2 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .welcome p {
+      color: #718096;
+    }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #667eea;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section h2 {
+      font-size: 1.5rem;
+      color: #2d3748;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .card h3 {
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+      font-size: 1.2rem;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #718096;
+      flex-wrap: wrap;
+    }
+
+    .card-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .card p {
+      color: #4a5568;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-active {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .empty-state {
+      background: white;
+      padding: 3rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .empty-state h3 {
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Table */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Dashboard</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
+        <a href="#">Profile</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="welcome">
+      <h2>Welcome back, {{ user.username }}!</h2>
+      <p>Here's what's happening with your volunteer activities</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{{ applications|length }}</div>
+        <div class="stat-label">Total Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ pending_applications }}</div>
+        <div class="stat-label">Pending Applications</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{% if volunteer_profile %}{{ volunteer_profile.hours_completed }}{% else %}0{% endif %}</div>
+        <div class="stat-label">Hours Completed</div>
+      </div>
+    </div>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>My Applications</h2>
+      </div>
+
+      {% if applications %}
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Opportunity</th>
+                <th>Organization</th>
+                <th>Applied Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for application in applications %}
+              <tr>
+                <td><strong>{{ application.opportunity.title }}</strong></td>
+                <td>{{ application.opportunity.organization.username }}</td>
+                <td>{{ application.applied_at|date:"M d, Y" }}</td>
+                <td>
+                  <span class="status-badge status-{{ application.status }}">
+                    {{ application.get_status_display }}
+                  </span>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No applications yet</h3>
+          <p>Start browsing opportunities to find something that matches your interests</p>
+          <a href="{% url 'opportunities:list' %}" class="btn">Browse Opportunities</a>
+        </div>
+      {% endif %}
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Recommended Opportunities</h2>
+        <a href="{% url 'opportunities:list' %}" class="btn-secondary btn">View All</a>
+      </div>
+
+      {% if recommended_opportunities %}
+        <div class="cards-grid">
+          {% for opportunity in recommended_opportunities %}
+          <div class="card">
+            <h3>{{ opportunity.title }}</h3>
+            <div class="card-meta">
+              <span>📍 {{ opportunity.location }}</span>
+              <span>⏰ {{ opportunity.hours_required }}h</span>
+              <span class="status-badge status-{{ opportunity.status }}">{{ opportunity.get_status_display }}</span>
+            </div>
+            <p>{{ opportunity.description|truncatewords:20 }}</p>
+            <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn">View Details</a>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h3>No opportunities available</h3>
+          <p>Check back later for new volunteer opportunities</p>
+        </div>
+      {% endif %}
+    </section>
+  </main>
+</body>
+</html>

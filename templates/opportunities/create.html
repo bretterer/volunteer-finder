@@ -1,119 +1,367 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create Opportunity - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{% block title %}Create Opportunity - Volunteer Match{% endblock %}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
 
-{% block content %}
-<div class="row">
-    <div class="col-lg-8 mx-auto">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h2 class="mb-0">Create Volunteer Opportunity</h2>
-            </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-                    <!-- Title -->
-                    <div class="mb-3">
-                        <label for="{{ form.title.id_for_label }}" class="form-label">
-                            Opportunity Title <span class="text-danger">*</span>
-                        </label>
-                        {{ form.title }}
-                        {% if form.title.errors %}
-                            <div class="text-danger small">{{ form.title.errors }}</div>
-                        {% endif %}
-                    </div>
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-                    <!-- Description -->
-                    <div class="mb-3">
-                        <label for="{{ form.description.id_for_label }}" class="form-label">
-                            Description <span class="text-danger">*</span>
-                        </label>
-                        {{ form.description }}
-                        {% if form.description.errors %}
-                            <div class="text-danger small">{{ form.description.errors }}</div>
-                        {% endif %}
-                        <small class="form-text text-muted">
-                            Describe the volunteer role, responsibilities, and what volunteers will be doing.
-                        </small>
-                    </div>
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
 
-                    <!-- Location -->
-                    <div class="mb-3">
-                        <label for="{{ form.location.id_for_label }}" class="form-label">
-                            Location <span class="text-danger">*</span>
-                        </label>
-                        {{ form.location }}
-                        {% if form.location.errors %}
-                            <div class="text-danger small">{{ form.location.errors }}</div>
-                        {% endif %}
-                    </div>
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
 
-                    <!-- Date Range -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.start_date.id_for_label }}" class="form-label">
-                                Start Date <span class="text-danger">*</span>
-                            </label>
-                            {{ form.start_date }}
-                            {% if form.start_date.errors %}
-                                <div class="text-danger small">{{ form.start_date.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.end_date.id_for_label }}" class="form-label">
-                                End Date
-                            </label>
-                            {{ form.end_date }}
-                            {% if form.end_date.errors %}
-                                <div class="text-danger small">{{ form.end_date.errors }}</div>
-                            {% endif %}
-                            <small class="form-text text-muted">Optional - leave blank for one-day events</small>
-                        </div>
-                    </div>
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
 
-                    <!-- Hours and Spots -->
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.hours_required.id_for_label }}" class="form-label">
-                                Hours Required <span class="text-danger">*</span>
-                            </label>
-                            {{ form.hours_required }}
-                            {% if form.hours_required.errors %}
-                                <div class="text-danger small">{{ form.hours_required.errors }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="{{ form.spots_available.id_for_label }}" class="form-label">
-                                Spots Available <span class="text-danger">*</span>
-                            </label>
-                            {{ form.spots_available }}
-                            {% if form.spots_available.errors %}
-                                <div class="text-danger small">{{ form.spots_available.errors }}</div>
-                            {% endif %}
-                        </div>
-                    </div>
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
 
-                    <!-- Required Skills -->
-                    <div class="mb-4">
-                        <label for="{{ form.skills_input.id_for_label }}" class="form-label">
-                            Required Skills
-                        </label>
-                        {{ form.skills_input }}
-                        {% if form.skills_input.errors %}
-                            <div class="text-danger small">{{ form.skills_input.errors }}</div>
-                        {% endif %}
-                        <small class="form-text text-muted">{{ form.skills_input.help_text }}</small>
-                    </div>
+    /* Main Content */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
 
-                    <!-- Submit Buttons -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Create Opportunity</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    .page-intro {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .page-intro h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .page-intro p {
+      color: #718096;
+    }
+
+    .form-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .required {
+      color: #e53e3e;
+      margin-left: 0.25rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 0.85rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      background: #f7fafc;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: #718096;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .error {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .btn {
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Create Volunteer Opportunity</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'organization_dashboard' %}">Dashboard</a>
+        <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
     </div>
-</div>
-{% endblock %}
+  </header>
+
+  <main class="container">
+    <div class="page-intro">
+      <h2>Post a New Volunteer Opportunity</h2>
+      <p>Fill out the form below to create a volunteer opportunity and connect with passionate volunteers.</p>
+    </div>
+
+    <div class="form-card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}">
+            Opportunity Title <span class="required">*</span>
+          </label>
+          {{ form.title }}
+          {% if form.title.errors %}
+            {% for error in form.title.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.description.id_for_label }}">
+            Description <span class="required">*</span>
+          </label>
+          {{ form.description }}
+          {% if form.description.errors %}
+            {% for error in form.description.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          <span class="help-text">Describe the volunteer role, responsibilities, and what volunteers will be doing.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.location.id_for_label }}">
+            Location <span class="required">*</span>
+          </label>
+          {{ form.location }}
+          {% if form.location.errors %}
+            {% for error in form.location.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.start_date.id_for_label }}">
+              Start Date <span class="required">*</span>
+            </label>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+              {% for error in form.start_date.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.end_date.id_for_label }}">
+              End Date
+            </label>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+              {% for error in form.end_date.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+            <span class="help-text">Optional - leave blank for one-day events</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.hours_required.id_for_label }}">
+              Hours Required <span class="required">*</span>
+            </label>
+            {{ form.hours_required }}
+            {% if form.hours_required.errors %}
+              {% for error in form.hours_required.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.spots_available.id_for_label }}">
+              Spots Available <span class="required">*</span>
+            </label>
+            {{ form.spots_available }}
+            {% if form.spots_available.errors %}
+              {% for error in form.spots_available.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.skills_input.id_for_label }}">
+            Required Skills
+          </label>
+          {{ form.skills_input }}
+          {% if form.skills_input.errors %}
+            {% for error in form.skills_input.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          <span class="help-text">{{ form.skills_input.help_text }}</span>
+        </div>
+
+        <div class="form-actions">
+          <a href="{% url 'organization_dashboard' %}" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">Create Opportunity</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
