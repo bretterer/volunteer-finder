@@ -13,9 +13,13 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load dotenv file with additional needs for AI key and token count
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,6 +49,8 @@ INSTALLED_APPS = [
     'opportunities',
     'matching',
     'notifications',
+    'resumes',
+    'scripts'
 ]
 
 MIDDLEWARE = [
@@ -144,3 +150,11 @@ EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+
+# OpenAI Configuration
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
+OPENAI_MODEL = os.getenv('MODEL_NAME', 'gpt-4o-mini')
+OPENAI_MAX_TOKENS = int(os.getenv('MAX_COMPLETION_TOKENS', 2100))
+
+# Scoring Configuration
+SCORING_THRESHOLD = 65  # Minimum score to consider
