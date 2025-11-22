@@ -1,0 +1,437 @@
+{
+    "resumes": {
+        "1": {
+            "filename": "Aimee_Montoya_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Aimee_Montoya_Resume.txt",
+            "text": "Name: Aimee Montoya\nDegree: Bachelor of Science in Psychology\nEmail: sarah12@umich.edu\nPhone: (734) 492-7930\nLinkedIn: https://www.linkedin.com/in/darrell18\n\nSummary:\nMotivated Psychology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nBehavioral Analysis, Survey Design, SPSS\n\nExperience:\nVolunteer Coordinator | Nelson PLC | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.97/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.722516",
+            "email": null,
+            "phone": null
+        },
+        "2": {
+            "filename": "Allison_Hill_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Allison_Hill_Resume.txt",
+            "text": "Name: Allison Hill\nDegree: Bachelor of Science in Political Science\nEmail: donaldgarcia@umich.edu\nPhone: (734) 314-1409\nLinkedIn: https://www.linkedin.com/in/garzaanthony\n\nSummary:\nMotivated Political Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nResearch Writing, Public Speaking, Policy Analysis\n\nExperience:\nVolunteer Coordinator | Robinson PLC | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.1/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.723678",
+            "email": null,
+            "phone": null
+        },
+        "3": {
+            "filename": "Andrew_Graham_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Andrew_Graham_Resume.docx",
+            "text": "Name: Andrew Graham\nDegree: Bachelor of Science in Sociology\nEmail: michaeljones@umich.edu\nPhone: (734) 652-8007\nLinkedIn: https://www.linkedin.com/in/cindy14\n\nSummary:\nMotivated Sociology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nData Collection, Analysis, SPSS\n\nExperience:\nTeaching Assistant | Parker, Ortiz and Powell | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.58/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.735516",
+            "email": null,
+            "phone": null
+        },
+        "4": {
+            "filename": "Angela_Dennis_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Angela_Dennis_Resume.txt",
+            "text": "Name: Angela Dennis\nDegree: Bachelor of Science in Sociology\nEmail: spenceamanda@umich.edu\nPhone: (734) 317-9797\nLinkedIn: https://www.linkedin.com/in/davidalvarez\n\nSummary:\nMotivated Sociology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nSPSS, Analysis, Interviewing\n\nExperience:\nResearch Assistant | Martin, Rose and Obrien | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.16/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.737228",
+            "email": null,
+            "phone": null
+        },
+        "5": {
+            "filename": "Angela_Hernandez_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Angela_Hernandez_Resume.pdf",
+            "text": "Name: Angela Hernandez Degree: Bachelor of Science in Mathematics Email: tbenson@umich.edu\nPhone: (734) 937-5920 LinkedIn: https://www.linkedin.com/in/calebrussell Summary: Motivated\nMathematics student passionate about community engagement and collaborative volunteering. Skills:\nExcel, Data Analysis, R Experience: Tutor | Owens, Brown and Wall | 2023 - Present - Collaborated on\nteam projects and community initiatives - Developed tools improving efficiency - Supported peers in\nachieving project goals Education: University of Michigan | Expected Graduation: 2024 GPA: 3.7/4.0\nCertifications: Project Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.740536",
+            "email": null,
+            "phone": null
+        },
+        "6": {
+            "filename": "Ashley_James_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Ashley_James_Resume.pdf",
+            "text": "Name: Ashley James Degree: Bachelor of Science in Psychology Email: melanie94@umich.edu\nPhone: (734) 803-5557 LinkedIn: https://www.linkedin.com/in/blairamanda Summary: Motivated\nPsychology student passionate about community engagement and collaborative volunteering. Skills:\nSPSS, Behavioral Analysis, Survey Design Experience: Event Organizer | Miller-Carter | 2023 - Present\n- Collaborated on team projects and community initiatives - Developed skills improving efficiency -\nSupported peers in achieving project goals Education: University of Michigan | Expected Graduation:\n2024 GPA: 3.22/4.0 Certifications: Data Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.743213",
+            "email": null,
+            "phone": null
+        },
+        "7": {
+            "filename": "Brittany_Anderson_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Brittany_Anderson_Resume.pdf",
+            "text": "Name: Brittany Anderson Degree: Bachelor of Science in Liberal Arts Email: michael05@umich.edu\nPhone: (734) 885-6147 LinkedIn: https://www.linkedin.com/in/evelynestrada Summary: Motivated\nLiberal Arts student passionate about community engagement and collaborative volunteering. Skills:\nPublic Speaking, Creative Writing, Team Collaboration Experience: Teaching Assistant |\nDeleon-Henson | 2023 - Present - Collaborated on team projects and community initiatives - Developed\ntools improving efficiency - Supported peers in achieving project goals Education: University of\nMichigan | Expected Graduation: 2024 GPA: 3.32/4.0 Certifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.745399",
+            "email": null,
+            "phone": null
+        },
+        "8": {
+            "filename": "Cameron_Dean_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Cameron_Dean_Resume.docx",
+            "text": "Name: Cameron Dean\nDegree: Bachelor of Science in Data Science\nEmail: meadowsbrittany@umich.edu\nPhone: (734) 879-6491\nLinkedIn: https://www.linkedin.com/in/millerroy\n\nSummary:\nMotivated Data Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nPython, Statistics, SQL\n\nExperience:\nVolunteer Coordinator | White-Green | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.02/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.753956",
+            "email": null,
+            "phone": null
+        },
+        "9": {
+            "filename": "Cameron_Fisher_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Cameron_Fisher_Resume.txt",
+            "text": "Name: Cameron Fisher\nDegree: Bachelor of Science in Physics\nEmail: lbyrd@umich.edu\nPhone: (734) 242-6050\nLinkedIn: https://www.linkedin.com/in/richard04\n\nSummary:\nMotivated Physics student passionate about community engagement and collaborative volunteering.\n\nSkills:\nPython, Experimental Design, Mathematica\n\nExperience:\nVolunteer Coordinator | Clark-Floyd | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.1/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.755759",
+            "email": null,
+            "phone": null
+        },
+        "10": {
+            "filename": "Cindy_Anderson_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Cindy_Anderson_Resume.pdf",
+            "text": "Name: Cindy Anderson Degree: Bachelor of Science in Sociology Email: esanchez@umich.edu Phone:\n(734) 697-2133 LinkedIn: https://www.linkedin.com/in/glee Summary: Motivated Sociology student\npassionate about community engagement and collaborative volunteering. Skills: Interviewing, Data\nCollection, Analysis Experience: Marketing Intern | Jordan, Henderson and Owens | 2022 - Present -\nCollaborated on team projects and community initiatives - Developed tools improving efficiency -\nSupported peers in achieving project goals Education: University of Michigan | Expected Graduation:\n2023 GPA: 3.53/4.0 Certifications: N/A\n",
+            "registered_at": "2025-11-07T13:12:11.757930",
+            "email": null,
+            "phone": null
+        },
+        "11": {
+            "filename": "Cody_Larson_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Cody_Larson_Resume.pdf",
+            "text": "Name: Cody Larson Degree: Bachelor of Science in Political Science Email: richarddavid@umich.edu\nPhone: (734) 861-2612 LinkedIn: https://www.linkedin.com/in/bethwilliams Summary: Motivated\nPolitical Science student passionate about community engagement and collaborative volunteering.\nSkills: Policy Analysis, Public Speaking, Research Writing Experience: Research Assistant | Barnes\nPLC | 2022 - Present - Collaborated on team projects and community initiatives - Developed skills\nimproving efficiency - Supported peers in achieving project goals Education: University of Michigan |\nExpected Graduation: 2023 GPA: 3.19/4.0 Certifications: N/A\n",
+            "registered_at": "2025-11-07T13:12:11.759990",
+            "email": null,
+            "phone": null
+        },
+        "12": {
+            "filename": "Courtney_Keller_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Courtney_Keller_Resume.txt",
+            "text": "Name: Courtney Keller\nDegree: Bachelor of Science in Mathematics\nEmail: emurphy@umich.edu\nPhone: (734) 309-3546\nLinkedIn: https://www.linkedin.com/in/michael86\n\nSummary:\nMotivated Mathematics student passionate about community engagement and collaborative volunteering.\n\nSkills:\nData Analysis, Excel, R\n\nExperience:\nVolunteer Coordinator | Zavala, Herrera and Crosby | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.69/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.761673",
+            "email": null,
+            "phone": null
+        },
+        "13": {
+            "filename": "Deborah_Figueroa_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Deborah_Figueroa_Resume.docx",
+            "text": "Name: Deborah Figueroa\nDegree: Bachelor of Science in Liberal Arts\nEmail: hhoffman@umich.edu\nPhone: (734) 613-2964\nLinkedIn: https://www.linkedin.com/in/landryhannah\n\nSummary:\nMotivated Liberal Arts student passionate about community engagement and collaborative volunteering.\n\nSkills:\nTeam Collaboration, Public Speaking, Creative Writing\n\nExperience:\nLibrary Assistant | Gardner LLC | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.66/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.770894",
+            "email": null,
+            "phone": null
+        },
+        "14": {
+            "filename": "Destiny_Strickland_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Destiny_Strickland_Resume.txt",
+            "text": "Name: Destiny Strickland\nDegree: Bachelor of Science in Computer Science\nEmail: rsims@umich.edu\nPhone: (734) 925-8144\nLinkedIn: https://www.linkedin.com/in/sjones\n\nSummary:\nMotivated Computer Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nPython, Java, Git\n\nExperience:\nTutor | Nelson LLC | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.92/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.773311",
+            "email": null,
+            "phone": null
+        },
+        "15": {
+            "filename": "Dr._Steven_Martin_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Dr._Steven_Martin_Resume.pdf",
+            "text": "Name: Dr. Steven Martin Degree: Bachelor of Science in Mathematics Email:\ngallowayjoseph@umich.edu Phone: (734) 726-4899 LinkedIn: https://www.linkedin.com/in/smitchell\nSummary: Motivated Mathematics student passionate about community engagement and collaborative\nvolunteering. Skills: Data Analysis, R, MATLAB Experience: Marketing Intern | Cowan, Peters and\nHiggins | 2022 - Present - Collaborated on team projects and community initiatives - Developed\nprograms improving efficiency - Supported peers in achieving project goals Education: University of\nMichigan | Expected Graduation: 2023 GPA: 3.94/4.0 Certifications: N/A\n",
+            "registered_at": "2025-11-07T13:12:11.780696",
+            "email": null,
+            "phone": null
+        },
+        "16": {
+            "filename": "Edward_Novak_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Edward_Novak_Resume.txt",
+            "text": "Name: Edward Novak\nDegree: Bachelor of Science in Psychology\nEmail: adkinsbrian@umich.edu\nPhone: (734) 616-4119\nLinkedIn: https://www.linkedin.com/in/hshaw\n\nSummary:\nMotivated Psychology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nSPSS, Behavioral Analysis, Survey Design\n\nExperience:\nEvent Organizer | Brown PLC | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.47/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.782090",
+            "email": null,
+            "phone": null
+        },
+        "17": {
+            "filename": "Emily_Green_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Emily_Green_Resume.pdf",
+            "text": "Name: Emily Green Degree: Bachelor of Science in Environmental Science Email: john62@umich.edu\nPhone: (734) 387-5563 LinkedIn: https://www.linkedin.com/in/stephen10 Summary: Motivated\nEnvironmental Science student passionate about community engagement and collaborative\nvolunteering. Skills: Data Analysis, GIS, Field Sampling Experience: Resident Assistant | Howell-Hart |\n2021 - Present - Collaborated on team projects and community initiatives - Developed skills improving\nefficiency - Supported peers in achieving project goals Education: University of Michigan | Expected\nGraduation: 2022 GPA: 3.65/4.0 Certifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.784041",
+            "email": null,
+            "phone": null
+        },
+        "18": {
+            "filename": "Erica_Ramos_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Erica_Ramos_Resume.txt",
+            "text": "Name: Erica Ramos\nDegree: Bachelor of Science in Sociology\nEmail: williamleon@umich.edu\nPhone: (734) 358-4878\nLinkedIn: https://www.linkedin.com/in/donnacampbell\n\nSummary:\nMotivated Sociology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nInterviewing, Data Collection, Analysis\n\nExperience:\nSoftware Developer Intern | Schultz, Rogers and Cardenas | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.92/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.785615",
+            "email": null,
+            "phone": null
+        },
+        "19": {
+            "filename": "Grant_Watts_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Grant_Watts_Resume.txt",
+            "text": "Name: Grant Watts\nDegree: Bachelor of Science in Business Administration\nEmail: william40@umich.edu\nPhone: (734) 258-1821\nLinkedIn: https://www.linkedin.com/in/waltersmaria\n\nSummary:\nMotivated Business Administration student passionate about community engagement and collaborative volunteering.\n\nSkills:\nPowerPoint, Leadership, Excel\n\nExperience:\nSoftware Developer Intern | Smith and Sons | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.07/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.787695",
+            "email": null,
+            "phone": null
+        },
+        "20": {
+            "filename": "Jennifer_Adkins_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Jennifer_Adkins_Resume.docx",
+            "text": "Name: Jennifer Adkins\nDegree: Bachelor of Science in Philosophy\nEmail: tracynelson@umich.edu\nPhone: (734) 870-6279\nLinkedIn: https://www.linkedin.com/in/vjohnson\n\nSummary:\nMotivated Philosophy student passionate about community engagement and collaborative volunteering.\n\nSkills:\nEthics Analysis, Writing, Critical Thinking\n\nExperience:\nVolunteer Coordinator | Shelton, Powell and Martin | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.17/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.795820",
+            "email": null,
+            "phone": null
+        },
+        "21": {
+            "filename": "Jesse_Rogers_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Jesse_Rogers_Resume.pdf",
+            "text": "Name: Jesse Rogers Degree: Bachelor of Science in Philosophy Email: aramirez@umich.edu Phone:\n(734) 986-2193 LinkedIn: https://www.linkedin.com/in/mary70 Summary: Motivated Philosophy student\npassionate about community engagement and collaborative volunteering. Skills: Ethics Analysis,\nWriting, Critical Thinking Experience: Tutor | Ryan, Cooke and Bell | 2024 - Present - Collaborated on\nteam projects and community initiatives - Developed tools improving efficiency - Supported peers in\nachieving project goals Education: University of Michigan | Expected Graduation: 2025 GPA: 3.24/4.0\nCertifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.798482",
+            "email": null,
+            "phone": null
+        },
+        "22": {
+            "filename": "Jessica_Briggs_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Jessica_Briggs_Resume.docx",
+            "text": "Name: Jessica Briggs\nDegree: Bachelor of Science in Mathematics\nEmail: jrivas@umich.edu\nPhone: (734) 810-8119\nLinkedIn: https://www.linkedin.com/in/vmerritt\n\nSummary:\nMotivated Mathematics student passionate about community engagement and collaborative volunteering.\n\nSkills:\nData Analysis, Excel, Statistics\n\nExperience:\nLibrary Assistant | Cole-Walton | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.9/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.806826",
+            "email": null,
+            "phone": null
+        },
+        "23": {
+            "filename": "Johnny_Campos_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Johnny_Campos_Resume.pdf",
+            "text": "Name: Johnny Campos Degree: Bachelor of Science in Business Administration Email:\nhernandezernest@umich.edu Phone: (734) 986-1916 LinkedIn: https://www.linkedin.com/in/ycarlson\nSummary: Motivated Business Administration student passionate about community engagement and\ncollaborative volunteering. Skills: Financial Modeling, Excel, PowerPoint Experience: Tutor |\nCarlson-Mcdonald | 2023 - Present - Collaborated on team projects and community initiatives -\nDeveloped skills improving efficiency - Supported peers in achieving project goals Education: University\nof Michigan | Expected Graduation: 2024 GPA: 3.21/4.0 Certifications: Data Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.809610",
+            "email": null,
+            "phone": null
+        },
+        "24": {
+            "filename": "John_Kelly_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\John_Kelly_Resume.pdf",
+            "text": "Name: John Kelly Degree: Bachelor of Science in Computer Science Email: matthew94@umich.edu\nPhone: (734) 598-6507 LinkedIn: https://www.linkedin.com/in/blackjames Summary: Motivated\nComputer Science student passionate about community engagement and collaborative volunteering.\nSkills: Git, Java, Linux Experience: Teaching Assistant | Cortez Group | 2021 - Present - Collaborated\non team projects and community initiatives - Developed tools improving efficiency - Supported peers in\nachieving project goals Education: University of Michigan | Expected Graduation: 2022 GPA: 3.59/4.0\nCertifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.812013",
+            "email": null,
+            "phone": null
+        },
+        "25": {
+            "filename": "Joshua_Wagner_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Joshua_Wagner_Resume.docx",
+            "text": "Name: Joshua Wagner\nDegree: Bachelor of Science in Liberal Arts\nEmail: sarahibarra@umich.edu\nPhone: (734) 370-7658\nLinkedIn: https://www.linkedin.com/in/mikemoore\n\nSummary:\nMotivated Liberal Arts student passionate about community engagement and collaborative volunteering.\n\nSkills:\nCreative Writing, Team Collaboration, Public Speaking\n\nExperience:\nTutor | Warner, Carr and Archer | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.38/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.820062",
+            "email": null,
+            "phone": null
+        },
+        "26": {
+            "filename": "Juan_Dunlap_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Juan_Dunlap_Resume.txt",
+            "text": "Name: Juan Dunlap\nDegree: Bachelor of Science in Political Science\nEmail: maldonadoamanda@umich.edu\nPhone: (734) 711-7482\nLinkedIn: https://www.linkedin.com/in/kayla51\n\nSummary:\nMotivated Political Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nResearch Writing, Public Speaking, Policy Analysis\n\nExperience:\nLab Technician | Graham-Chavez | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.74/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.821868",
+            "email": null,
+            "phone": null
+        },
+        "27": {
+            "filename": "Kevin_Hall_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Kevin_Hall_Resume.pdf",
+            "text": "Name: Kevin Hall Degree: Bachelor of Science in Data Science Email: adrianzimmerman@umich.edu\nPhone: (734) 200-6310 LinkedIn: https://www.linkedin.com/in/perezrebecca Summary: Motivated Data\nScience student passionate about community engagement and collaborative volunteering. Skills:\nStatistics, Python, TensorFlow Experience: Event Organizer | Jones-Young | 2023 - Present -\nCollaborated on team projects and community initiatives - Developed skills improving efficiency -\nSupported peers in achieving project goals Education: University of Michigan | Expected Graduation:\n2024 GPA: 3.06/4.0 Certifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.824630",
+            "email": null,
+            "phone": null
+        },
+        "28": {
+            "filename": "Kristina_Baldwin_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Kristina_Baldwin_Resume.pdf",
+            "text": "Name: Kristina Baldwin Degree: Bachelor of Science in Environmental Science Email:\nlrobinson@umich.edu Phone: (734) 232-1488 LinkedIn: https://www.linkedin.com/in/lisa02 Summary:\nMotivated Environmental Science student passionate about community engagement and collaborative\nvolunteering. Skills: GIS, Field Sampling, Data Analysis Experience: Marketing Intern | Henderson,\nRamirez and Lewis | 2021 - Present - Collaborated on team projects and community initiatives -\nDeveloped programs improving efficiency - Supported peers in achieving project goals Education:\nUniversity of Michigan | Expected Graduation: 2022 GPA: 3.2/4.0 Certifications: N/A\n",
+            "registered_at": "2025-11-07T13:12:11.827054",
+            "email": null,
+            "phone": null
+        },
+        "29": {
+            "filename": "Kristin_Cohen_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Kristin_Cohen_Resume.txt",
+            "text": "Name: Kristin Cohen\nDegree: Bachelor of Science in Liberal Arts\nEmail: perezantonio@umich.edu\nPhone: (734) 303-7227\nLinkedIn: https://www.linkedin.com/in/richard13\n\nSummary:\nMotivated Liberal Arts student passionate about community engagement and collaborative volunteering.\n\nSkills:\nCreative Writing, Team Collaboration, Public Speaking\n\nExperience:\nTeaching Assistant | Walter, Edwards and Rios | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.21/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.828808",
+            "email": null,
+            "phone": null
+        },
+        "30": {
+            "filename": "Lindsay_Martinez_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Lindsay_Martinez_Resume.pdf",
+            "text": "Name: Lindsay Martinez Degree: Bachelor of Science in Engineering Email: reedross@umich.edu\nPhone: (734) 543-6238 LinkedIn: https://www.linkedin.com/in/casey50 Summary: Motivated\nEngineering student passionate about community engagement and collaborative volunteering. Skills:\nProject Management, CAD, C++ Experience: Teaching Assistant | Short-Garcia | 2022 - Present -\nCollaborated on team projects and community initiatives - Developed tools improving efficiency -\nSupported peers in achieving project goals Education: University of Michigan | Expected Graduation:\n2023 GPA: 3.69/4.0 Certifications: Project Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.831525",
+            "email": null,
+            "phone": null
+        },
+        "31": {
+            "filename": "Madison_Poole_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Madison_Poole_Resume.txt",
+            "text": "Name: Madison Poole\nDegree: Bachelor of Science in Environmental Science\nEmail: ryangross@umich.edu\nPhone: (734) 617-6421\nLinkedIn: https://www.linkedin.com/in/christina87\n\nSummary:\nMotivated Environmental Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nField Sampling, Data Analysis, GIS\n\nExperience:\nSoftware Developer Intern | Graham-Simon | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.39/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.833042",
+            "email": null,
+            "phone": null
+        },
+        "32": {
+            "filename": "Marc_Moore_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Marc_Moore_Resume.docx",
+            "text": "Name: Marc Moore\nDegree: Bachelor of Science in Psychology\nEmail: michellecherry@umich.edu\nPhone: (734) 836-2638\nLinkedIn: https://www.linkedin.com/in/nicolejohnson\n\nSummary:\nMotivated Psychology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nSPSS, Behavioral Analysis, Survey Design\n\nExperience:\nTeaching Assistant | Middleton, Patton and Jenkins | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.88/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.847929",
+            "email": null,
+            "phone": null
+        },
+        "33": {
+            "filename": "Mark_Diaz_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Mark_Diaz_Resume.pdf",
+            "text": "Name: Mark Diaz Degree: Bachelor of Science in Mathematics Email: michael41@umich.edu Phone:\n(734) 765-5803 LinkedIn: https://www.linkedin.com/in/amandasanchez Summary: Motivated\nMathematics student passionate about community engagement and collaborative volunteering. Skills:\nExcel, Data Analysis, R Experience: Volunteer Coordinator | Gray-Mayo | 2021 - Present - Collaborated\non team projects and community initiatives - Developed skills improving efficiency - Supported peers in\nachieving project goals Education: University of Michigan | Expected Graduation: 2022 GPA: 3.66/4.0\nCertifications: Data Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.850429",
+            "email": null,
+            "phone": null
+        },
+        "34": {
+            "filename": "Megan_Joyce_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Megan_Joyce_Resume.docx",
+            "text": "Name: Megan Joyce\nDegree: Bachelor of Science in Data Science\nEmail: brownjessica@umich.edu\nPhone: (734) 973-4295\nLinkedIn: https://www.linkedin.com/in/wrightjames\n\nSummary:\nMotivated Data Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nTensorFlow, SQL, Statistics\n\nExperience:\nResident Assistant | Taylor-White | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.25/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.859151",
+            "email": null,
+            "phone": null
+        },
+        "35": {
+            "filename": "Megan_Walker_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Megan_Walker_Resume.docx",
+            "text": "Name: Megan Walker\nDegree: Bachelor of Science in Sociology\nEmail: dylanwilliams@umich.edu\nPhone: (734) 454-5371\nLinkedIn: https://www.linkedin.com/in/xcarr\n\nSummary:\nMotivated Sociology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nInterviewing, SPSS, Data Collection\n\nExperience:\nTutor | Gibson Ltd | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.22/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.868116",
+            "email": null,
+            "phone": null
+        },
+        "36": {
+            "filename": "Michael_Rubio_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Michael_Rubio_Resume.pdf",
+            "text": "Name: Michael Rubio Degree: Bachelor of Science in Engineering Email: mdavid@umich.edu Phone:\n(734) 969-5050 LinkedIn: https://www.linkedin.com/in/vargasmaria Summary: Motivated Engineering\nstudent passionate about community engagement and collaborative volunteering. Skills: Circuit Design,\nC++, Project Management Experience: Volunteer Coordinator | Garcia LLC | 2023 - Present -\nCollaborated on team projects and community initiatives - Developed tools improving efficiency -\nSupported peers in achieving project goals Education: University of Michigan | Expected Graduation:\n2024 GPA: 3.08/4.0 Certifications: Data Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.871106",
+            "email": null,
+            "phone": null
+        },
+        "37": {
+            "filename": "Michael_Wang_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Michael_Wang_Resume.docx",
+            "text": "Name: Michael Wang\nDegree: Bachelor of Science in Data Science\nEmail: catherinestuart@umich.edu\nPhone: (734) 772-6198\nLinkedIn: https://www.linkedin.com/in/stricklandfrank\n\nSummary:\nMotivated Data Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nStatistics, TensorFlow, SQL\n\nExperience:\nMarketing Intern | Rodriguez-Johnson | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.74/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.880038",
+            "email": null,
+            "phone": null
+        },
+        "38": {
+            "filename": "Michelle_Cruz_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Michelle_Cruz_Resume.docx",
+            "text": "Name: Michelle Cruz\nDegree: Bachelor of Science in Engineering\nEmail: psanchez@umich.edu\nPhone: (734) 433-4652\nLinkedIn: https://www.linkedin.com/in/staffordmichelle\n\nSummary:\nMotivated Engineering student passionate about community engagement and collaborative volunteering.\n\nSkills:\nCAD, SolidWorks, C++\n\nExperience:\nEvent Organizer | Osborne and Sons | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.97/4.0\n\nCertifications:\nData Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.889383",
+            "email": null,
+            "phone": null
+        },
+        "39": {
+            "filename": "Nancy_Wright_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Nancy_Wright_Resume.docx",
+            "text": "Name: Nancy Wright\nDegree: Bachelor of Science in Physics\nEmail: kristinrodriguez@umich.edu\nPhone: (734) 648-9900\nLinkedIn: https://www.linkedin.com/in/garrisonjeffrey\n\nSummary:\nMotivated Physics student passionate about community engagement and collaborative volunteering.\n\nSkills:\nPython, Data Modeling, Experimental Design\n\nExperience:\nMarketing Intern | Bailey-Hoover | 2023 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.1/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.898936",
+            "email": null,
+            "phone": null
+        },
+        "40": {
+            "filename": "Paula_Moreno_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Paula_Moreno_Resume.txt",
+            "text": "Name: Paula Moreno\nDegree: Bachelor of Science in Political Science\nEmail: georgetracy@umich.edu\nPhone: (734) 363-7916\nLinkedIn: https://www.linkedin.com/in/hickmannatasha\n\nSummary:\nMotivated Political Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nResearch Writing, Policy Analysis, Public Speaking\n\nExperience:\nTutor | Allen-Allen | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.25/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.900840",
+            "email": null,
+            "phone": null
+        },
+        "41": {
+            "filename": "Rachael_Pearson_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Rachael_Pearson_Resume.txt",
+            "text": "Name: Rachael Pearson\nDegree: Bachelor of Science in Environmental Science\nEmail: herringjames@umich.edu\nPhone: (734) 424-3881\nLinkedIn: https://www.linkedin.com/in/howelljohn\n\nSummary:\nMotivated Environmental Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nField Sampling, Data Analysis, GIS\n\nExperience:\nMarketing Intern | Caldwell-Elliott | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.46/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.902429",
+            "email": null,
+            "phone": null
+        },
+        "42": {
+            "filename": "Randy_Shah_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Randy_Shah_Resume.txt",
+            "text": "Name: Randy Shah\nDegree: Bachelor of Science in Environmental Science\nEmail: gateskathy@umich.edu\nPhone: (734) 880-7211\nLinkedIn: https://www.linkedin.com/in/wwoods\n\nSummary:\nMotivated Environmental Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nField Sampling, GIS, Data Analysis\n\nExperience:\nTutor | Molina-Castaneda | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.29/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.903934",
+            "email": null,
+            "phone": null
+        },
+        "43": {
+            "filename": "Samuel_Rivas_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Samuel_Rivas_Resume.docx",
+            "text": "Name: Samuel Rivas\nDegree: Bachelor of Science in Environmental Science\nEmail: ramirezshannon@umich.edu\nPhone: (734) 688-1096\nLinkedIn: https://www.linkedin.com/in/qhudson\n\nSummary:\nMotivated Environmental Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nData Analysis, Field Sampling, GIS\n\nExperience:\nTutor | Rogers-Snyder | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.22/4.0\n\nCertifications:\nN/A\n",
+            "registered_at": "2025-11-07T13:12:11.913680",
+            "email": null,
+            "phone": null
+        },
+        "44": {
+            "filename": "Shannon_Jones_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Shannon_Jones_Resume.docx",
+            "text": "Name: Shannon Jones\nDegree: Bachelor of Science in Computer Science\nEmail: williamsyvette@umich.edu\nPhone: (734) 802-4770\nLinkedIn: https://www.linkedin.com/in/novaksara\n\nSummary:\nMotivated Computer Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nLinux, Java, Python\n\nExperience:\nResearch Assistant | Martin Group | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.07/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.922731",
+            "email": null,
+            "phone": null
+        },
+        "45": {
+            "filename": "Sherri_Baker_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Sherri_Baker_Resume.pdf",
+            "text": "Name: Sherri Baker Degree: Bachelor of Science in Philosophy Email: williamrodriguez@umich.edu\nPhone: (734) 638-7543 LinkedIn: https://www.linkedin.com/in/meagan89 Summary: Motivated\nPhilosophy student passionate about community engagement and collaborative volunteering. Skills:\nEthics Analysis, Critical Thinking, Writing Experience: Marketing Intern | Hernandez and Sons | 2024 -\nPresent - Collaborated on team projects and community initiatives - Developed skills improving\nefficiency - Supported peers in achieving project goals Education: University of Michigan | Expected\nGraduation: 2025 GPA: 3.76/4.0 Certifications: Certified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.926002",
+            "email": null,
+            "phone": null
+        },
+        "46": {
+            "filename": "Stacey_Ward_Resume.docx",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Stacey_Ward_Resume.docx",
+            "text": "Name: Stacey Ward\nDegree: Bachelor of Science in Mathematics\nEmail: janetwilliams@umich.edu\nPhone: (734) 589-2584\nLinkedIn: https://www.linkedin.com/in/kendragalloway\n\nSummary:\nMotivated Mathematics student passionate about community engagement and collaborative volunteering.\n\nSkills:\nData Analysis, Excel, R\n\nExperience:\nLab Technician | Delacruz Group | 2021 - Present\n- Collaborated on team projects and community initiatives\n- Developed programs improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2022\nGPA: 3.46/4.0\n\nCertifications:\nCertified Volunteer Leader\n",
+            "registered_at": "2025-11-07T13:12:11.935657",
+            "email": null,
+            "phone": null
+        },
+        "47": {
+            "filename": "Tanya_Campos_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Tanya_Campos_Resume.txt",
+            "text": "Name: Tanya Campos\nDegree: Bachelor of Science in Sociology\nEmail: jenniferross@umich.edu\nPhone: (734) 469-9201\nLinkedIn: https://www.linkedin.com/in/samuel87\n\nSummary:\nMotivated Sociology student passionate about community engagement and collaborative volunteering.\n\nSkills:\nInterviewing, SPSS, Data Collection\n\nExperience:\nLab Technician | Wright Inc | 2022 - Present\n- Collaborated on team projects and community initiatives\n- Developed skills improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2023\nGPA: 3.37/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.937866",
+            "email": null,
+            "phone": null
+        },
+        "48": {
+            "filename": "Thomas_Ellis_Resume.txt",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Thomas_Ellis_Resume.txt",
+            "text": "Name: Thomas Ellis\nDegree: Bachelor of Science in Political Science\nEmail: donald88@umich.edu\nPhone: (734) 863-2169\nLinkedIn: https://www.linkedin.com/in/julie69\n\nSummary:\nMotivated Political Science student passionate about community engagement and collaborative volunteering.\n\nSkills:\nResearch Writing, Policy Analysis, Public Speaking\n\nExperience:\nTeaching Assistant | Cox-Osborn | 2024 - Present\n- Collaborated on team projects and community initiatives\n- Developed tools improving efficiency\n- Supported peers in achieving project goals\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.27/4.0\n\nCertifications:\nProject Management Fundamentals\n",
+            "registered_at": "2025-11-07T13:12:11.939644",
+            "email": null,
+            "phone": null
+        },
+        "49": {
+            "filename": "Tyler_Holmes_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Tyler_Holmes_Resume.pdf",
+            "text": "Name: Tyler Holmes Degree: Bachelor of Science in Political Science Email:\ngrantsamantha@umich.edu Phone: (734) 721-7548 LinkedIn: https://www.linkedin.com/in/bryantlaurie\nSummary: Motivated Political Science student passionate about community engagement and\ncollaborative volunteering. Skills: Research Writing, Public Speaking, Policy Analysis Experience:\nResearch Assistant | Schmidt, Hansen and Stewart | 2023 - Present - Collaborated on team projects\nand community initiatives - Developed skills improving efficiency - Supported peers in achieving project\ngoals Education: University of Michigan | Expected Graduation: 2024 GPA: 3.58/4.0 Certifications: Data\nAnalytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.955619",
+            "email": null,
+            "phone": null
+        },
+        "50": {
+            "filename": "Wesley_White_Resume.pdf",
+            "file_path": "C:\\Users\\mlshe\\SWE559\\volunteer-finder\\sample_resumes\\Wesley_White_Resume.pdf",
+            "text": "Name: Wesley White Degree: Bachelor of Science in Psychology Email: benjamin96@umich.edu\nPhone: (734) 457-1832 LinkedIn: https://www.linkedin.com/in/jessica56 Summary: Motivated\nPsychology student passionate about community engagement and collaborative volunteering. Skills:\nSPSS, Survey Design, Behavioral Analysis Experience: Software Developer Intern | Joyce, Wilson and\nLam | 2021 - Present - Collaborated on team projects and community initiatives - Developed tools\nimproving efficiency - Supported peers in achieving project goals Education: University of Michigan |\nExpected Graduation: 2022 GPA: 3.77/4.0 Certifications: Data Analytics Certificate\n",
+            "registered_at": "2025-11-07T13:12:11.958576",
+            "email": null,
+            "phone": null
+        },
+        "52": {
+            "filename": "ethan_clark_resume.pdf",
+            "file_path": "resumes\\ethan_clark_resume.pdf",
+            "text": "Name: Ethan Clark\nDegree: Bachelor of Science in Computer Science\nEmail: eclark@umich.edu\nPhone: (734) 379-1123\nLinkedIn: https://www.linkedin.com/in/ethanclark\nSummary:\nComputer Science student volunteering to teach coding fundamentals and technology literacy to underserved youth.\nSkills:\nPython, HTML/CSS, Public Instruction\nExperience:\nTechnology Volunteer | Code4Change | 2022 - Present\n- Instructed high school students on basic programming\n- Developed materials for digital literacy courses\nEducation:\nUniversity of Michigan | Expected Graduation: 2026■GPA: 3.9/4.0\nCertifications:\nCertified Digital Literacy Trainer\n",
+            "registered_at": "2025-11-08T15:13:47.573668",
+            "email": null,
+            "phone": null
+        },
+        "53": {
+            "filename": "jordan_matthews_resume.docx",
+            "file_path": "resumes\\jordan_matthews_resume.docx",
+            "text": "Name: Jordan Matthews\nDegree: Bachelor of Arts in Sociology\nEmail: jmatthews@umich.edu\nPhone: (734) 218-9843\nLinkedIn: https://www.linkedin.com/in/jmatthews\nSummary:\nSociology student dedicated to addressing social inequities through active volunteering and local engagement.\nSkills:\nData Collection, Public Relations, Event Management\nExperience:\nCommunity Volunteer | Hope Network | 2023 - Present\n- Coordinated outreach programs for underprivileged families\n- Designed community surveys for needs assessments\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.5/4.0\nCertifications:\nCommunity Service Leadership Certificate",
+            "registered_at": "2025-11-08T15:44:51.907254",
+            "email": null,
+            "phone": null
+        },
+        "54": {
+            "filename": "marcus_allen_resume.txt",
+            "file_path": "resumes\\marcus_allen_resume.txt",
+            "text": "Name: Marcus Allen\nDegree: Bachelor of Science in Public Health\nEmail: mallen@umich.edu\nPhone: (734) 509-8741\nLinkedIn: https://www.linkedin.com/in/marcusallen\n\nSummary:\nPublic Health major focused on improving access to healthcare through volunteer clinics and community drives.\n\nSkills:\nHealth Data Entry, Communication, Patient Assistance\n\nExperience:\nHealth Volunteer | Wellness Outreach | 2023 - Present\n- Assisted in organizing free vaccination clinics\n- Conducted surveys for community health research\n\nEducation:\nUniversity of Michigan | Expected Graduation: 2024\nGPA: 3.8/4.0\n\nCertifications:\nFirst Aid & CPR Certified\n",
+            "registered_at": "2025-11-09T11:05:21.035830",
+            "email": null,
+            "phone": null
+        },
+        "55": {
+            "filename": "olivia_nguyen_resume.docx",
+            "file_path": "resumes\\olivia_nguyen_resume.docx",
+            "text": "Name: Olivia Nguyen\nDegree: Bachelor of Fine Arts in Design\nEmail: onguyen@umich.edu\nPhone: (734) 284-6642\nLinkedIn: https://www.linkedin.com/in/olivian\nSummary:\nCreative design student using art and media to promote community wellness and nonprofit branding initiatives.\nSkills:\nGraphic Design, Adobe Creative Suite, Visual Communication\nExperience:\nDesign Volunteer | Art for Impact | 2023 - Present\n- Created digital campaigns for local charities\n- Designed promotional materials for fundraising events\nEducation:\nUniversity of Michigan | Expected Graduation: 2025\nGPA: 3.4/4.0\nCertifications:\nCertified Nonprofit Design Specialist",
+            "registered_at": "2025-11-09T14:04:46.828321",
+            "email": null,
+            "phone": null
+        }
+    },
+    "next_id": 56
+}
