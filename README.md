@@ -7,6 +7,7 @@ A web application to connect volunteers with organizations seeking volunteer sup
 - Brian Retterer
 - Stayner Rodriguez
 - Matthew Sheaffer
+- Ryana Quadir
 
 ## Project Overview
 
