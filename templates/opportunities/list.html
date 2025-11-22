@@ -1,58 +1,387 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Browse Opportunities - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{% block title %}Browse Opportunities - Volunteer Match{% endblock %}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
 
-{% block content %}
-<div class="row mb-4">
-    <div class="col">
-        <h1>Volunteer Opportunities</h1>
-        <p class="lead">Find meaningful ways to give back to your community</p>
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    .header-nav button:hover {
+      background: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .page-header h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .page-header p {
+      color: #718096;
+      font-size: 1.1rem;
+    }
+
+    /* Search/Filter Section */
+    .filter-section {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Opportunities Grid */
+    .opportunities-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .opportunity-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .opportunity-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    .opportunity-header {
+      margin-bottom: 1rem;
+    }
+
+    .opportunity-title {
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .organization-name {
+      color: #718096;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .opportunity-description {
+      color: #4a5568;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .opportunity-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      background: #f7fafc;
+      border-radius: 8px;
+    }
+
+    .meta-item {
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+
+    .meta-label {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .skills-container {
+      margin-bottom: 1rem;
+    }
+
+    .skills-label {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #edf2f7;
+      color: #4a5568;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .empty-state {
+      background: white;
+      padding: 4rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .empty-state p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .opportunities-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .opportunity-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Finder</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        {% if user.is_authenticated %}
+          {% if user.user_type == 'volunteer' %}
+            <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+          {% elif user.user_type == 'organization' %}
+            <a href="{% url 'organization_dashboard' %}">Dashboard</a>
+            <a href="{% url 'opportunities:create' %}">Post Opportunity</a>
+          {% elif user.user_type == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+          {% endif %}
+          <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0.5rem 1rem; font-size: inherit; font-family: inherit; border-radius: 6px; transition: all 0.2s;">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register_volunteer' %}">Sign Up</a>
+        {% endif %}
+      </nav>
     </div>
-</div>
+  </header>
 
-{% if opportunities %}
-    <div class="row">
+  <main class="container">
+    <div class="page-header">
+      <h2>Volunteer Opportunities</h2>
+      <p>Find meaningful ways to give back to your community</p>
+    </div>
+
+    {% if opportunities %}
+      <div class="opportunities-grid">
         {% for opportunity in opportunities %}
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ opportunity.title }}</h5>
-                    <p class="card-text text-muted">
-                        <small>
-                            <i class="bi bi-building"></i> {{ opportunity.organization.organization_profile.organization_name }}
-                        </small>
-                    </p>
-                    <p class="card-text">{{ opportunity.description|truncatewords:20 }}</p>
-
-                    <ul class="list-unstyled small">
-                        <li><strong>Location:</strong> {{ opportunity.location }}</li>
-                        <li><strong>Start Date:</strong> {{ opportunity.start_date }}</li>
-                        <li><strong>Hours:</strong> {{ opportunity.hours_required }} hours</li>
-                        <li><strong>Spots:</strong> {{ opportunity.spots_available }} available</li>
-                    </ul>
-
-                    {% if opportunity.required_skills %}
-                    <div class="mb-2">
-                        <small class="text-muted">Required Skills:</small><br>
-                        {% for skill in opportunity.required_skills %}
-                            <span class="badge bg-secondary">{{ skill }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="card-footer bg-transparent">
-                    <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn btn-primary btn-sm w-100">
-                        View Details
-                    </a>
-                </div>
+        <div class="opportunity-card">
+          <div class="opportunity-header">
+            <h3 class="opportunity-title">{{ opportunity.title }}</h3>
+            <div class="organization-name">
+              🏢 {% if opportunity.organization.organization_profile %}{{ opportunity.organization.organization_profile.organization_name }}{% else %}{{ opportunity.organization.username }}{% endif %}
             </div>
+          </div>
+
+          <p class="opportunity-description">{{ opportunity.description|truncatewords:25 }}</p>
+
+          <div class="opportunity-meta">
+            <div class="meta-item">
+              <div class="meta-label">📍 Location</div>
+              {{ opportunity.location }}
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">📅 Start Date</div>
+              {{ opportunity.start_date|date:"M d, Y" }}
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">⏰ Hours</div>
+              {{ opportunity.hours_required }} hours
+            </div>
+            <div class="meta-item">
+              <div class="meta-label">👥 Spots</div>
+              {{ opportunity.spots_available }} available
+            </div>
+          </div>
+
+          {% if opportunity.required_skills %}
+          <div class="skills-container">
+            <span class="skills-label">Required Skills:</span>
+            <div>
+              {% for skill in opportunity.required_skills %}
+                <span class="skill-tag">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+          {% endif %}
+
+          <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn">View Details & Apply</a>
         </div>
         {% endfor %}
-    </div>
-{% else %}
-    <div class="alert alert-info">
-        <h4>No opportunities available yet</h4>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-state-icon">🔍</div>
+        <h3>No opportunities available yet</h3>
         <p>Check back soon for new volunteer opportunities!</p>
-    </div>
-{% endif %}
-{% endblock %}
+        {% if user.is_authenticated %}
+          {% if user.user_type == 'volunteer' %}
+            <a href="{% url 'volunteer_dashboard' %}" class="btn">Return to Dashboard</a>
+          {% elif user.user_type == 'organization' %}
+            <a href="{% url 'organization_dashboard' %}" class="btn">Return to Dashboard</a>
+          {% elif user.user_type == 'admin' %}
+            <a href="{% url 'admin_dashboard' %}" class="btn">Return to Dashboard</a>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'home' %}" class="btn">Return Home</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </main>
+</body>
+</html>
