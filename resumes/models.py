@@ -99,6 +99,25 @@ class ResumeScore(models.Model):
     key_strength = models.TextField(help_text="Main Strength of Candidate")
     concerns = models.TextField(blank=True, help_text="Potential concerns or gaps")
 
+    acceptance_status = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Pending Review'),
+                 ('accepted', 'Accepted'),
+                 ('rejected', 'Rejected'),
+                 ('waitlist', 'Waitlist'),
+        ],
+        default='pending'
+    )
+    accepted_at = models.DateTimeField(null=True, blank=True)
+    accepted_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='accepted_candidates'
+    )
+
+
     # Metadata
     scored_at = models.DateTimeField(auto_now_add=True)
     scored_by_model = models.CharField(

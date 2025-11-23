@@ -5,12 +5,15 @@ Scoring service for resume-opportunity matching using OpenAI.
 import os
 import json
 import logging
+import time
 from typing import Dict, List, Optional
+from pathlib import Path
 
-import openai
+from openai import OpenAI, APIError, APIConnectionError, RateLimitError, APITimeoutError  # ✅ Add error imports
 from django.conf import settings
+from django.utils import timezone
 
-from .models import Resume, ResumeScore
+from .models import Resume, ResumeScore, ScoringJob
 from opportunities.models import Opportunity
 
 logger = logging.getLogger(__name__)
@@ -32,7 +35,12 @@ class ResumeScoringService:
         if not self.api_key:
             raise ValueError("OPENAI_API_KEY not found in settings or environment")
 
-        openai.api_key = self.api_key
+        # ✅ Create OpenAI client with timeout
+        self.client = OpenAI(
+            api_key=self.api_key,
+            timeout=30.0,  # ✅ 30 second timeout
+            max_retries=2  # ✅ Retry twice on failure
+        )
 
         self.model_name = model_name or getattr(settings, 'OPENAI_MODEL', 'gpt-4o-mini')
         self.max_tokens = max_tokens or getattr(settings, 'OPENAI_MAX_TOKENS', 2100)
@@ -64,70 +72,115 @@ class ResumeScoringService:
                 logger.info(f"Resume {resume.id} already scored for opportunity {opportunity.id}")
                 return existing
 
-        try:
-            # Build the prompt
-            prompt = self._build_scoring_prompt(resume, opportunity)
+        # ✅ Add retry logic with specific error handling
+        max_retries = 3
+        retry_delay = 2  # seconds
 
-            # Call OpenAI
-            logger.info(f"Scoring resume {resume.id} for opportunity {opportunity.id}")
-            response = openai.ChatCompletion.create(
-                model=self.model_name,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are an expert HR recruiter analyzing candidate resumes."
-                    },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
-                ],
-                max_tokens=self.max_tokens,
-                temperature=0.7
-            )
+        for attempt in range(max_retries):
+            try:
+                # Build the prompt
+                prompt = self._build_scoring_prompt(resume, opportunity)
 
-            # Parse response
-            result_text = response.choices[0].message.content.strip()
-            score_data = self._parse_scoring_response(result_text)
+                # Call OpenAI
+                logger.info(
+                    f"Scoring resume {resume.id} for opportunity {opportunity.id} (attempt {attempt + 1}/{max_retries})")
 
-            # Map recommendation
-            recommendation_map = {
-                'Highly Recommended': 'highly_recommended',
-                'Recommended': 'recommended',
-                'Consider': 'consider',
-                'Not Recommended': 'not_recommended'
-            }
-            recommendation = recommendation_map.get(
-                score_data.get('recommendation', 'Consider'),
-                'consider'
-            )
+                response = self.client.chat.completions.create(
+                    model=self.model_name,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "You are an expert HR recruiter analyzing candidate resumes."
+                        },
+                        {
+                            "role": "user",
+                            "content": prompt
+                        }
+                    ],
+                    max_tokens=self.max_tokens,
+                    temperature=0.7
+                )
 
-            # Create or update score
-            score, created = ResumeScore.objects.update_or_create(
-                resume=resume,
-                opportunity=opportunity,
-                defaults={
-                    'overall_score': score_data.get('overall', 0),
-                    'skills_match': score_data.get('skills_match', 0),
-                    'experience_match': score_data.get('experience_match', 0),
-                    'education_match': score_data.get('education_match', 0),
-                    'grade': score_data.get('grade', 'F'),
-                    'recommendation': recommendation,
-                    'key_strength': score_data.get('key_strength', ''),
-                    'concerns': score_data.get('concerns', ''),
-                    'scored_by_model': self.model_name
+                # Parse response
+                result_text = response.choices[0].message.content.strip()
+                score_data = self._parse_scoring_response(result_text)
+
+                # Map recommendation
+                recommendation_map = {
+                    'Highly Recommended': 'highly_recommended',
+                    'Recommended': 'recommended',
+                    'Consider': 'consider',
+                    'Not Recommended': 'not_recommended'
                 }
-            )
+                recommendation = recommendation_map.get(
+                    score_data.get('recommendation', 'Consider'),
+                    'consider'
+                )
 
-            action = "Created" if created else "Updated"
-            logger.info(
-                f"{action} score for resume {resume.id} x opportunity {opportunity.id}: {score.overall_score}/100")
+                # Create or update score
+                score, created = ResumeScore.objects.update_or_create(
+                    resume=resume,
+                    opportunity=opportunity,
+                    defaults={
+                        'overall_score': score_data.get('overall', 0),
+                        'skills_match': score_data.get('skills_match', 0),
+                        'experience_match': score_data.get('experience_match', 0),
+                        'education_match': score_data.get('education_match', 0),
+                        'grade': score_data.get('grade', 'F'),
+                        'recommendation': recommendation,
+                        'key_strength': score_data.get('key_strength', ''),
+                        'concerns': score_data.get('concerns', ''),
+                        'scored_by_model': self.model_name
+                    }
+                )
 
-            return score
+                action = "Created" if created else "Updated"
+                logger.info(
+                    f"{action} score for resume {resume.id} x opportunity {opportunity.id}: {score.overall_score}/100")
 
-        except Exception as e:
-            logger.error(f"Error scoring resume {resume.id} for opportunity {opportunity.id}: {e}")
-            return None
+                return score
+
+            # ✅ Handle specific errors
+            except APITimeoutError as e:
+                logger.warning(
+                    f"Timeout on attempt {attempt + 1}/{max_retries} for resume {resume.id} x opportunity {opportunity.id}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                    continue
+                else:
+                    logger.error(f"Final timeout for resume {resume.id} x opportunity {opportunity.id}")
+                    return None
+
+            except RateLimitError as e:
+                logger.warning(f"Rate limit hit on attempt {attempt + 1}/{max_retries}: {e}")
+                if attempt < max_retries - 1:
+                    # Exponential backoff for rate limits
+                    wait_time = retry_delay * (2 ** attempt)
+                    logger.info(f"Waiting {wait_time} seconds before retry...")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    logger.error(f"Rate limit exceeded for resume {resume.id} x opportunity {opportunity.id}")
+                    return None
+
+            except APIConnectionError as e:
+                logger.warning(f"Connection error on attempt {attempt + 1}/{max_retries}: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(retry_delay)
+                    continue
+                else:
+                    logger.error(f"Connection failed for resume {resume.id} x opportunity {opportunity.id}")
+                    return None
+
+            except APIError as e:
+                logger.error(f"API error for resume {resume.id} x opportunity {opportunity.id}: {e}")
+                return None
+
+            except Exception as e:
+                logger.error(f"Unexpected error scoring resume {resume.id} for opportunity {opportunity.id}: {e}")
+                return None
+
+        return None
 
     def score_resume_for_all_opportunities(
             self,
@@ -151,12 +204,19 @@ class ResumeScoringService:
 
         logger.info(f"Scoring resume {resume.id} against {opportunities.count()} opportunities")
 
-        for opportunity in opportunities:
+        total_opps = opportunities.count()
+        for idx, opportunity in enumerate(opportunities, 1):
+            # ✅ Progress indicator
+            if idx % 10 == 0:
+                logger.info(f"Progress: {idx}/{total_opps} opportunities scored")
+
             score = self.score_resume_for_opportunity(resume, opportunity, force=force)
             if score:
                 scores.append(score)
+            else:
+                logger.warning(f"Failed to score resume {resume.id} for opportunity {opportunity.id}")
 
-        logger.info(f"Completed scoring resume {resume.id}: {len(scores)} scores created")
+        logger.info(f"Completed scoring resume {resume.id}: {len(scores)}/{total_opps} scores created")
         return scores
 
     def score_all_unscored_resumes(self, min_score: int = 65) -> Dict[str, int]:
@@ -212,17 +272,24 @@ class ResumeScoringService:
         Returns:
             Formatted prompt string
         """
+        # ✅ Limit text lengths to prevent huge prompts
+        max_description_length = 500
+        max_resume_length = 2000
+
+        description = opportunity.description[:max_description_length] if opportunity.description else "Not provided"
+        resume_text = resume.extracted_text[:max_resume_length] if resume.extracted_text else "Not provided"
+
         prompt = f"""You are evaluating a candidate's resume for a volunteer opportunity.
 
 OPPORTUNITY:
 Position: {opportunity.title}
 Department: {opportunity.location}
-Description: {opportunity.description[:500]}
+Description: {description}
 Required Skills: {', '.join(opportunity.required_skills) if opportunity.required_skills else 'Not specified'}
 Hours Required: {opportunity.hours_required} per week
 
 CANDIDATE RESUME:
-{resume.extracted_text[:2000]}
+{resume_text}
 
 Please provide a JSON response with the following structure:
 {{

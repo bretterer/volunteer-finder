@@ -240,3 +240,6 @@ backups/
 *.doc
 !requirements.txt
 !README.txt
+resume_uploads/
+opportunity_uploads/
+archive/

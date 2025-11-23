@@ -26,6 +26,7 @@ class Opportunity(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='active')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    source_filename = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         db_table = 'opportunities'
