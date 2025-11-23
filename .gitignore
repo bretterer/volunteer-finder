@@ -14,6 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
+__pycache__/
 lib/
 lib64/
 parts/
@@ -137,7 +138,10 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.env.*
 .env
+!.env.example
+*.env
 .envrc
 .venv
 env/
@@ -211,3 +215,31 @@ __marimo__/
 
 sample_opportunities/
 sample_resumes/
+results/
+resume/
+test_candidates/
+backups/
+
+# Databases & data files
+*.db
+*.sqlite
+*.sqlite3
+*.csv
+!requirements.csv
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb
+
+# Old system (if you want to keep JSON files local)
+*_database.json
+
+# File types - resume files
+*.pdf
+*.docx
+*.doc
+!requirements.txt
+!README.txt
+resume_uploads/
+opportunity_uploads/
+archive/
