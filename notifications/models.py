@@ -1,6 +1,3 @@
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.core.mail import send_mail
 from django.db import models
 from accounts.models import User
 
@@ -28,7 +25,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'notifications'
+        db_table = 'notifications' #name in DB
         ordering = ['-created_at']
 
     def __str__(self):
