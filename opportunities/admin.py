@@ -39,3 +39,4 @@ class ApplicationAdmin(admin.ModelAdmin):
         return obj.opportunity.title
     get_opportunity_title.short_description = 'Opportunity'
     get_opportunity_title.admin_order_field = 'opportunity__title'
+
