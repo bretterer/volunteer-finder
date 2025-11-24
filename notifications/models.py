@@ -25,7 +25,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        db_table = 'notifications'
+        db_table = 'notifications' #name in DB
         ordering = ['-created_at']
 
     def __str__(self):
