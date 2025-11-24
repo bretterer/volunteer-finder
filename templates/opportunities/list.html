@@ -17,7 +17,6 @@
       color: #2d3748;
     }
 
-    /* Header */
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
@@ -35,10 +34,7 @@
       gap: 1rem;
     }
 
-    .header h1 {
-      font-size: 1.8rem;
-      font-weight: 600;
-    }
+    .header h1 { font-size: 1.8rem; font-weight: 600; }
 
     .header-nav {
       display: flex;
@@ -53,15 +49,8 @@
       transition: opacity 0.2s;
     }
 
-    .header-nav a:hover {
-      opacity: 0.8;
-    }
+    .header-nav a:hover { opacity: 0.8; }
 
-    .header-nav button:hover {
-      background: rgba(255, 255, 255, 0.2) !important;
-    }
-
-    /* Main Content */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -88,39 +77,159 @@
       font-size: 1.1rem;
     }
 
-    /* Search/Filter Section */
-    .filter-section {
-      background: white;
-      padding: 1.5rem;
+    .top-matches-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       border-radius: 12px;
+      padding: 1.5rem 2rem;
       margin-bottom: 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     }
 
-    .filter-controls {
-      display: flex;
+    .top-matches-header {
+      margin-bottom: 1rem;
+    }
+
+    .top-matches-title {
+      color: white;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .top-matches-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .top-matches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
-      flex-wrap: wrap;
-      align-items: center;
     }
 
-    .search-input {
-      flex: 1;
-      min-width: 250px;
-      padding: 0.75rem 1rem;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
+    .match-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .match-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .match-rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .match-rank.gold { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+    .match-rank.silver { background: linear-gradient(135deg, #a8c0ff 0%, #3f5efb 100%); }
+    .match-rank.bronze { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+
+    .match-title {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      line-height: 1.3;
+    }
+
+    .match-location {
+      color: #718096;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .match-score {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .match-score.high { background: #c6f6d5; color: #22543d; }
+    .match-score.medium { background: #fefcbf; color: #744210; }
+    .match-score.low { background: #fed7d7; color: #822727; }
+
+    .match-btn {
+      padding: 0.5rem 0.75rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      transition: all 0.2s;
+      margin-top: auto;
+    }
+
+    .match-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+    }
+
+    .upload-resume-cta {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      color: white;
+    }
+
+    .upload-resume-cta p {
+      margin-bottom: 1rem;
       font-size: 1rem;
+    }
+
+    .upload-resume-btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: #667eea;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
       transition: all 0.2s;
     }
 
-    .search-input:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    .upload-resume-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
-    /* Opportunities Grid */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-divider h3 {
+      color: #2d3748;
+      font-size: 1.4rem;
+      margin-right: 1rem;
+    }
+
+    .section-divider-line {
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(to right, #e2e8f0, transparent);
+    }
+
     .opportunities-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -143,9 +252,7 @@
       box-shadow: 0 8px 16px rgba(0,0,0,0.1);
     }
 
-    .opportunity-header {
-      margin-bottom: 1rem;
-    }
+    .opportunity-header { margin-bottom: 1rem; }
 
     .opportunity-title {
       color: #2d3748;
@@ -157,9 +264,6 @@
     .organization-name {
       color: #718096;
       font-size: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
     }
 
     .opportunity-description {
@@ -179,19 +283,10 @@
       border-radius: 8px;
     }
 
-    .meta-item {
-      font-size: 0.9rem;
-      color: #4a5568;
-    }
+    .meta-item { font-size: 0.9rem; color: #4a5568; }
+    .meta-label { font-weight: 600; color: #2d3748; }
 
-    .meta-label {
-      font-weight: 600;
-      color: #2d3748;
-    }
-
-    .skills-container {
-      margin-bottom: 1rem;
-    }
+    .skills-container { margin-bottom: 1rem; }
 
     .skills-label {
       font-size: 0.85rem;
@@ -221,23 +316,11 @@
       transition: all 0.2s;
       display: inline-block;
       text-align: center;
-      border: none;
-      cursor: pointer;
     }
 
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-    }
-
-    .status-badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      background: #dbeafe;
-      color: #1e40af;
     }
 
     .empty-state {
@@ -248,39 +331,20 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
-    .empty-state-icon {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-    }
-
-    .empty-state h3 {
-      color: #2d3748;
-      margin-bottom: 0.5rem;
-      font-size: 1.5rem;
-    }
-
-    .empty-state p {
-      color: #718096;
-      margin-bottom: 1.5rem;
-    }
+    .empty-state-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .empty-state h3 { color: #2d3748; margin-bottom: 0.5rem; font-size: 1.5rem; }
+    .empty-state p { color: #718096; margin-bottom: 1.5rem; }
 
     @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        align-items: flex-start;
-      }
+      .header-content { flex-direction: column; align-items: flex-start; }
+      .container { padding: 1rem; }
+      .opportunities-grid { grid-template-columns: 1fr; }
+      .opportunity-meta { grid-template-columns: 1fr; }
+      .top-matches-grid { grid-template-columns: 1fr 1fr; }
+    }
 
-      .container {
-        padding: 1rem;
-      }
-
-      .opportunities-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .opportunity-meta {
-        grid-template-columns: 1fr;
-      }
+    @media (max-width: 500px) {
+      .top-matches-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -293,6 +357,7 @@
         {% if user.is_authenticated %}
           {% if user.user_type == 'volunteer' %}
             <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+            <a href="{% url 'resumes:my_resume' %}">My Resume</a>
           {% elif user.user_type == 'organization' %}
             <a href="{% url 'organization_dashboard' %}">Dashboard</a>
             <a href="{% url 'opportunities:create' %}">Post Opportunity</a>
@@ -301,7 +366,7 @@
           {% endif %}
           <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
             {% csrf_token %}
-            <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0.5rem 1rem; font-size: inherit; font-family: inherit; border-radius: 6px; transition: all 0.2s;">Logout</button>
+            <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0.5rem 1rem; font-size: inherit; font-family: inherit;">Logout</button>
           </form>
         {% else %}
           <a href="{% url 'login' %}">Login</a>
@@ -317,7 +382,48 @@
       <p>Find meaningful ways to give back to your community</p>
     </div>
 
+    {% if user.is_authenticated and user.user_type == 'volunteer' %}
+      <div class="top-matches-section">
+        <div class="top-matches-header">
+          <div class="top-matches-title">⭐ Your Top 5 Matches</div>
+          <div class="top-matches-subtitle">Personalized opportunities based on your resume</div>
+        </div>
+
+        {% if top_matches %}
+          <div class="top-matches-grid">
+            {% for match in top_matches %}
+              <div class="match-card">
+                <span class="match-rank {% if forloop.counter == 1 %}gold{% elif forloop.counter == 2 %}silver{% elif forloop.counter == 3 %}bronze{% endif %}">
+                  #{{ forloop.counter }}
+                </span>
+                <div class="match-title">{{ match.opportunity.title }}</div>
+                <div class="match-location">📍 {{ match.opportunity.location|truncatewords:3 }}</div>
+                <span class="match-score {% if match.overall_score >= 75 %}high{% elif match.overall_score >= 50 %}medium{% else %}low{% endif %}">
+                  {{ match.overall_score }}/100 Match
+                </span>
+                <a href="{% url 'opportunities:detail' match.opportunity.pk %}" class="match-btn">View & Apply</a>
+              </div>
+            {% endfor %}
+          </div>
+        {% elif has_resume %}
+          <div class="upload-resume-cta">
+            <p>🔄 Your resume is being analyzed. Refresh the page in a few minutes to see your personalized matches!</p>
+          </div>
+        {% else %}
+          <div class="upload-resume-cta">
+            <p>📄 Upload your resume to get personalized opportunity matches!</p>
+            <a href="{% url 'resumes:upload' %}" class="upload-resume-btn">Upload Resume</a>
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
     {% if opportunities %}
+      <div class="section-divider">
+        <h3>📋 All Opportunities</h3>
+        <div class="section-divider-line"></div>
+      </div>
+
       <div class="opportunities-grid">
         {% for opportunity in opportunities %}
         <div class="opportunity-card">
@@ -369,17 +475,7 @@
         <div class="empty-state-icon">🔍</div>
         <h3>No opportunities available yet</h3>
         <p>Check back soon for new volunteer opportunities!</p>
-        {% if user.is_authenticated %}
-          {% if user.user_type == 'volunteer' %}
-            <a href="{% url 'volunteer_dashboard' %}" class="btn">Return to Dashboard</a>
-          {% elif user.user_type == 'organization' %}
-            <a href="{% url 'organization_dashboard' %}" class="btn">Return to Dashboard</a>
-          {% elif user.user_type == 'admin' %}
-            <a href="{% url 'admin_dashboard' %}" class="btn">Return to Dashboard</a>
-          {% endif %}
-        {% else %}
-          <a href="{% url 'home' %}" class="btn">Return Home</a>
-        {% endif %}
+        <a href="{% url 'home' %}" class="btn">Return Home</a>
       </div>
     {% endif %}
   </main>

@@ -26,4 +26,5 @@ urlpatterns = [
     path('dashboard/organization/', organization_dashboard, name='organization_dashboard'),
     path('dashboard/admin/', admin_dashboard, name='admin_dashboard'),
     path('', home, name='home'),
+    path('resumes/', include('resumes.urls'))
 ]

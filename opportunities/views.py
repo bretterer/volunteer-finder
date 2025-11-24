@@ -4,7 +4,6 @@ from django.contrib import messages
 from .models import Opportunity
 from .forms import OpportunityForm
 
-# Create your views here.
 
 @login_required
 def create_opportunity(request):
@@ -35,9 +34,32 @@ def list_opportunities(request):
     """
     View to list all active volunteer opportunities.
     Accessible to all users (even non-logged-in).
+    Includes top 5 matches for logged-in volunteers with resumes.
     """
     opportunities = Opportunity.objects.filter(status='active').order_by('-created_at')
-    return render(request, 'opportunities/list.html', {'opportunities': opportunities})
+
+    # Get top 5 matches for logged-in volunteers
+    top_matches = []
+    has_resume = False
+
+    if request.user.is_authenticated and hasattr(request.user, 'user_type') and request.user.user_type == 'volunteer':
+        # Check if user has a resume
+        from resumes.models import Resume, ResumeScore
+        resume = Resume.objects.filter(user=request.user).first()
+
+        if resume:
+            has_resume = True
+            # Get top 5 matching opportunities
+            top_matches = ResumeScore.objects.filter(
+                resume=resume,
+                opportunity__status='active'
+            ).select_related('opportunity').order_by('-overall_score')[:5]
+
+    return render(request, 'opportunities/list.html', {
+        'opportunities': opportunities,
+        'top_matches': top_matches,
+        'has_resume': has_resume,
+    })
 
 
 def opportunity_detail(request, pk):
@@ -45,4 +67,49 @@ def opportunity_detail(request, pk):
     View to show details of a specific opportunity.
     """
     opportunity = get_object_or_404(Opportunity, pk=pk)
-    return render(request, 'opportunities/detail.html', {'opportunity': opportunity})
+
+    # Get top 10 candidates for organizations viewing their own opportunities
+    top_candidates = []
+    if request.user.is_authenticated and request.user == opportunity.organization:
+        from resumes.models import ResumeScore
+        top_candidates = ResumeScore.objects.filter(
+            opportunity=opportunity,
+            overall_score__gt=0
+        ).select_related('resume', 'resume__user').order_by('-overall_score')[:10]
+
+    return render(request, 'opportunities/detail.html', {
+        'opportunity': opportunity,
+        'top_candidates': top_candidates,
+    })
+
+
+@login_required
+def update_candidate_status(request, pk, score_id, status):
+    """
+    Update a candidate's acceptance status for an opportunity.
+    Only the organization owner can do this.
+    """
+    from resumes.models import ResumeScore
+    from django.utils import timezone
+
+    opportunity = get_object_or_404(Opportunity, pk=pk)
+
+    # Check if user owns this opportunity
+    if request.user != opportunity.organization:
+        messages.error(request, 'You do not have permission to update candidates.')
+        return redirect('opportunities:detail', pk=pk)
+
+    # Get the score and update status
+    score = get_object_or_404(ResumeScore, id=score_id, opportunity=opportunity)
+
+    if status in ['accepted', 'rejected', 'waitlist', 'pending']:
+        score.acceptance_status = status
+        if status == 'accepted':
+            score.accepted_at = timezone.now()
+            score.accepted_by = request.user
+        score.save()
+        messages.success(request, f'Candidate status updated to {status}.')
+    else:
+        messages.error(request, 'Invalid status.')
+
+    return redirect('opportunities:detail', pk=pk)
