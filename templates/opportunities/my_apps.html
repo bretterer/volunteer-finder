@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>My Applications</h1>
+
+{% if applications %}
+    {% for application in applications %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>{{ application.opportunity.title }}</h5>
+            <p><strong>Status:</strong> <span class="badge badge-{{ application.status }}">{{ application.get_status_display }}</span></p>
+            <p><strong>Applied:</strong> {{ application.created_at|date:"M d, Y" }}</p>
+            {% if application.status == 'pending' %}
+                <a href="{% url 'opportunities:withdraw_application' application.id %}" class="btn btn-sm btn-warning">Withdraw</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>You haven't applied to any opportunities yet.</p>
+{% endif %}
+{% endblock %}
