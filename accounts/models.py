@@ -19,6 +19,14 @@ class User(AbstractUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def name(self):
+        """Return full name or username as fallback"""
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        elif self.first_name:
+            return self.first_name
+        return self.username
+
     class Meta:
         db_table = 'users'
 

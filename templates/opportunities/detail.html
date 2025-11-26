@@ -67,6 +67,76 @@
                 </div>
                 {% endif %}
 
+                <!-- Top 10 Candidates (Only visible to opportunity owner) -->
+                {% if top_candidates %}
+                <div class="mb-4">
+                    <h5>🏆 Top 10 Matching Volunteers</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Volunteer</th>
+                                    <th>Match Score</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for score in top_candidates %}
+                                <tr>
+                                    <td>
+                                        <span class="badge {% if forloop.counter <= 3 %}bg-success{% else %}bg-primary{% endif %}">
+                                            #{{ forloop.counter }}
+                                        </span>
+                                    </td>
+                                    <td>{{ score.resume.user.username }}</td>
+                                    <td>
+                                        <span class="badge {% if score.overall_score >= 80 %}bg-success{% elif score.overall_score >= 60 %}bg-warning{% else %}bg-secondary{% endif %}">
+                                            {{ score.overall_score }}/100
+                                        </span>
+                                    </td>
+                                    <td>{{ score.grade }}</td>
+                                    <td>
+                                        <span class="badge {% if score.acceptance_status == 'accepted' %}bg-success{% elif score.acceptance_status == 'rejected' %}bg-danger{% elif score.acceptance_status == 'waitlist' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                            {{ score.get_acceptance_status_display }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if score.acceptance_status != 'accepted' %}
+                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'accepted' %}"
+                                               class="btn btn-sm btn-success" title="Accept">
+                                                ✓
+                                            </a>
+                                        {% endif %}
+                                        {% if score.acceptance_status != 'waitlist' %}
+                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'waitlist' %}"
+                                               class="btn btn-sm btn-warning" title="Waitlist">
+                                                ⏳
+                                            </a>
+                                        {% endif %}
+                                        {% if score.acceptance_status != 'rejected' %}
+                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'rejected' %}"
+                                               class="btn btn-sm btn-danger" title="Reject">
+                                                ✗
+                                            </a>
+                                        {% endif %}
+                                        {% if score.acceptance_status != 'pending' %}
+                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'pending' %}"
+                                               class="btn btn-sm btn-secondary" title="Reset">
+                                                ↺
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+
                 <!-- Action Buttons -->
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">Back to List</a>

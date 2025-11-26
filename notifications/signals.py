@@ -17,7 +17,7 @@ def notify_org_on_opportunity_creation(sender, instance, created, **kwargs):
     # --- 1) SEND EMAIL ---
     subject = "New Opportunity Created"
     message = (
-        f"Hello {org.name},\n\n"
+        f"Hello {org.username},\n\n"
         f"You have created a new opportunity:\n\n"
         f"Title: {instance.title}\n"
         f"Description: {instance.description}\n\n"
@@ -34,7 +34,7 @@ def notify_org_on_opportunity_creation(sender, instance, created, **kwargs):
 
     # --- 2) OPTIONAL: Create an in-app notification for the org user ---
     Notification.objects.create(
-        user=org.owner,  # depends on your model, change if needed
+        user=org,  # depends on your model, change if needed
         notification_type='new_opportunity',
         title=f"New Opportunity Created: {instance.title}",
         message=f"A new opportunity was created in your organization.",

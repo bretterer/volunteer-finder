@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}My Resume - Volunteer Finder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-file-alt me-2"></i>My Resume</h2>
+                <a href="{% url 'resumes:upload' %}" class="btn btn-primary">
+                    <i class="fas fa-upload me-2"></i>{% if resume %}Update{% else %}Upload{% endif %} Resume
+                </a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if resume %}
+                <!-- Resume Info -->
+                <div class="card mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Resume Uploaded</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>File:</strong> {{ resume.original_filename }}</p>
+                                <p><strong>Uploaded:</strong> {{ resume.uploaded_at|date:"M d, Y H:i" }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Size:</strong> {{ resume.file_size|filesizeformat }}</p>
+                                <p><strong>Matched Against:</strong> {{ scores|length }} opportunities</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Matches -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>Your Top Opportunity Matches</h5>
+                    </div>
+                    <div class="card-body">
+                        {% if scores %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Rank</th>
+                                            <th>Opportunity</th>
+                                            <th>Match Score</th>
+                                            <th>Skills Match</th>
+                                            <th>Experience Match</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for score in scores %}
+                                            <tr>
+                                                <td>
+                                                    <span class="badge {% if forloop.counter <= 3 %}bg-success{% elif forloop.counter <= 10 %}bg-primary{% else %}bg-secondary{% endif %}">
+                                                        #{{ forloop.counter }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <strong>{{ score.opportunity.title }}</strong>
+                                                    <br>
+                                                    <small class="text-muted">{{ score.opportunity.location }}</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge {% if score.overall_score >= 80 %}bg-success{% elif score.overall_score >= 60 %}bg-warning{% else %}bg-secondary{% endif %} fs-6">
+                                                        {{ score.overall_score }}/100
+                                                    </span>
+                                                </td>
+                                                <td>{{ score.skills_score }}/100</td>
+                                                <td>{{ score.experience_score }}/100</td>
+                                                <td>
+                                                    <a href="{% url 'opportunities:detail' score.opportunity.pk %}" class="btn btn-sm btn-outline-primary">
+                                                        View & Apply
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info mb-0">
+                                <i class="fas fa-spinner fa-spin me-2"></i>
+                                Your resume is being analyzed. Refresh the page in a few minutes to see your matches!
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            {% else %}
+                <!-- No Resume -->
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-file-upload fa-4x text-muted mb-4"></i>
+                        <h4>No Resume Uploaded</h4>
+                        <p class="text-muted">Upload your resume to get matched with volunteer opportunities!</p>
+                        <a href="{% url 'resumes:upload' %}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-upload me-2"></i>Upload Resume
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

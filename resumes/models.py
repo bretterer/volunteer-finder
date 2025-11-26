@@ -4,6 +4,7 @@ from accounts.models import User
 from opportunities.models import Opportunity
 from opportunities.models import Application
 
+
 class Resume(models.Model):
     """
     Volunteers upload resume.
@@ -40,72 +41,170 @@ class Resume(models.Model):
 
     class Meta:
         db_table = 'resumes'
-        ordering = ['-uploaded_at']
 
     def __str__(self):
         return f"{self.user.username} - {self.original_filename}"
 
-    def file_extension(self):
-        return self.file.name.split('.')[-1].lower()
+    def save(self, *args, **kwargs):
+        # Auto-calculate file_size from uploaded file
+        if self.file and not self.file_size:
+            try:
+                self.file_size = self.file.size
+            except:
+                self.file_size = 0
+
+        # Auto-set original_filename from uploaded file
+        if self.file and not self.original_filename:
+            try:
+                self.original_filename = self.file.name.split('/')[-1]
+            except:
+                self.original_filename = "unknown"
+
+        # Check if this is a new resume (no id yet)
+        is_new = self.pk is None
+
+        # FIRST save to ensure file is written to disk
+        super().save(*args, **kwargs)
+
+        # THEN extract text if not already extracted
+        if self.file and not self.extracted_text:
+            extracted = self._extract_text_from_file()
+            if extracted:
+                self.extracted_text = extracted
+                # Save again with extracted text (avoid triggering signals)
+                Resume.objects.filter(pk=self.pk).update(extracted_text=extracted)
+
+                # Trigger scoring for new resumes after text is extracted
+                if is_new:
+                    self._trigger_scoring()
+
+    def _extract_text_from_file(self):
+        """Extract text content from uploaded resume file"""
+        try:
+            import os
+            file_path = self.file.path
+
+            if not os.path.exists(file_path):
+                print(f"❌ File not found: {file_path}")
+                return ""
+
+            file_ext = file_path.lower().split('.')[-1]
+
+            if file_ext == 'txt':
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    return f.read()
+
+            elif file_ext == 'docx':
+                from docx import Document
+                doc = Document(file_path)
+                text = []
+                for paragraph in doc.paragraphs:
+                    text.append(paragraph.text)
+                extracted = '\n'.join(text)
+                print(f"✅ Extracted {len(extracted)} characters from DOCX")
+                return extracted
+
+            elif file_ext == 'pdf':
+                from PyPDF2 import PdfReader
+                reader = PdfReader(file_path)
+                text = []
+                for page in reader.pages:
+                    text.append(page.extract_text() or '')
+                extracted = '\n'.join(text)
+                print(f"✅ Extracted {len(extracted)} characters from PDF")
+                return extracted
+
+            else:
+                print(f"⚠️ Unsupported file type: {file_ext}")
+                return ""
+
+        except Exception as e:
+            print(f"❌ Error extracting text: {e}")
+            return ""
+
+    def _trigger_scoring(self):
+        """Trigger background scoring for this resume"""
+        import threading
+
+        def score_async(resume_id):
+            import time
+            time.sleep(1)
+
+            try:
+                from resumes.models import Resume, ResumeScore
+                from opportunities.models import Opportunity
+                from resumes.services import ResumeScoringService
+
+                resume = Resume.objects.get(id=resume_id)
+
+                if not resume.extracted_text:
+                    print(f"⚠️ No text to score for resume {resume_id}")
+                    return
+
+                print(f"🤖 Scoring resume: {resume.original_filename}")
+
+                service = ResumeScoringService()
+                opportunities = Opportunity.objects.filter(status='active')
+
+                count = 0
+                for opp in opportunities:
+                    if not ResumeScore.objects.filter(resume=resume, opportunity=opp).exists():
+                        try:
+                            service.score_resume_for_opportunity(resume, opp)
+                            count += 1
+                        except Exception as e:
+                            print(f"  ❌ Error: {e}")
+
+                print(f"✅ Scored resume against {count} opportunities")
+
+            except Exception as e:
+                print(f"❌ Scoring error: {e}")
+
+        thread = threading.Thread(target=score_async, args=(self.pk,))
+        thread.daemon = True
+        thread.start()
+
 
 class ResumeScore(models.Model):
     """
-    AI generated scoring for resumes to opportunities.
-    Separate from MatchScore for maintenance flexibility
+    AI-generated matching score between a resume and opportunity.
     """
-    grade_choices = (
-        ('A+', 'A+ (100-95)'),
-        ('A', 'A (94-90)'),
-        ('B+', 'B+ (89-85)'),
-        ('B', 'B (84-80)'),
-        ('C+', 'C+ (79-75)'),
-        ('C', 'C (74-70)'),
-        ('D', 'D (69-65)'),
-        ('F', 'F (64-0)'),
-    )
+    ACCEPTANCE_STATUS_CHOICES = [
+        ('pending', 'Pending Review'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+        ('waitlist', 'Waitlisted'),
+    ]
 
-    recommendation_choices = (
-        ('highly_recommended', 'Highly Recommended'),
-        ('recommended', 'Recommended'),
-        ('consider', 'Consider'),
-        ('not_recommended', 'Not Recommended'),
-    )
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='scores')
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, related_name='resume_scores')
 
-    resume = models.ForeignKey(
-        Resume,
-        on_delete=models.CASCADE,
-        related_name='scores'
-    )
+    # Scores (0-100)
+    overall_score = models.IntegerField(default=0)
+    skills_score = models.IntegerField(default=0)
+    experience_score = models.IntegerField(default=0)
+    education_score = models.IntegerField(default=0)
 
-    opportunity = models.ForeignKey(
-        Opportunity,
-        on_delete=models.CASCADE,
-        related_name='resume_scores'
-    )
+    # Alternative field names used by scoring service
+    skills_match = models.IntegerField(default=0)
+    experience_match = models.IntegerField(default=0)
+    education_match = models.IntegerField(default=0)
 
-    # Overall score (0-100)
-    overall_score = models.IntegerField(
-        help_text="Overall match score (0-100)"
-    )
+    # Letter grade
+    grade = models.CharField(max_length=2, blank=True)
 
-    # General Details
-    skills_match = models.IntegerField(default=0, help_text="Skills alignment (0-100)")
-    experience_match = models.IntegerField(default=0, help_text="Experience match (0-100)")
-    education_match = models.IntegerField(default=0, help_text="Education match (0-100)")
+    # AI explanation
+    recommendation = models.TextField(blank=True)
+    key_strength = models.TextField(blank=True)
+    concerns = models.TextField(blank=True)
 
-    # Qualitative assessment with recommendation
-    grade = models.CharField(max_length=3, choices=grade_choices)
-    recommendation = models.CharField(max_length=20, choices=recommendation_choices)
-    key_strength = models.TextField(help_text="Main Strength of Candidate")
-    concerns = models.TextField(blank=True, help_text="Potential concerns or gaps")
+    # Model tracking
+    scored_by_model = models.CharField(max_length=100, blank=True)
 
+    # Acceptance tracking
     acceptance_status = models.CharField(
         max_length=20,
-        choices=[('pending', 'Pending Review'),
-                 ('accepted', 'Accepted'),
-                 ('rejected', 'Rejected'),
-                 ('waitlist', 'Waitlist'),
-        ],
+        choices=ACCEPTANCE_STATUS_CHOICES,
         default='pending'
     )
     accepted_at = models.DateTimeField(null=True, blank=True)
@@ -114,72 +213,80 @@ class ResumeScore(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name='accepted_candidates'
+        related_name='accepted_scores'
     )
 
-
-    # Metadata
     scored_at = models.DateTimeField(auto_now_add=True)
-    scored_by_model = models.CharField(
-        max_length=50,
-        default='gpt-4o-mini',
-        help_text="AI Model used for Scoring"
-    )
 
     class Meta:
         db_table = 'resume_scores'
-        ordering = ['-overall_score']
         unique_together = ['resume', 'opportunity']
-        indexes = [
-            models.Index(fields=['opportunity', '-overall_score']),
-            models.Index(fields=['-overall_score']),
-        ]
+        ordering = ['-overall_score']
+
     def __str__(self):
         return f"{self.resume.user.username} → {self.opportunity.title}: {self.overall_score}/100"
 
-    def passes_threshold(self):
-        return self.overall_score >= 65
+    def save(self, *args, **kwargs):
+        # Sync alternative field names
+        if self.skills_match and not self.skills_score:
+            self.skills_score = self.skills_match
+        if self.experience_match and not self.experience_score:
+            self.experience_score = self.experience_match
+        if self.education_match and not self.education_score:
+            self.education_score = self.education_match
 
-    @classmethod
-    def get_top_candidate(cls, opportunity, limit=10, min_score=65, applied_only=True):
-        queryset = cls.objects.filter(opportunity=opportunity,
-                                      overall_score__gte=min_score,
-                                      ).select_related('resume__user', 'opportunity')
-        if applied_only:
-            applied_user_ids = Application.objects.filter(
-                opportunity=opportunity,
-            ).values_list('volunteer_id', flat=True)
+        # Auto-calculate grade based on overall_score
+        if self.overall_score >= 98:
+            self.grade = 'A+'
+        elif self.overall_score >= 94:
+            self.grade = 'A'
+        elif self.overall_score >= 90:
+            self.grade = 'A-'
+        elif self.overall_score >= 85:
+            self.grade = 'B+'
+        elif self.overall_score >= 80:
+            self.grade = 'B'
+        elif self.overall_score >= 74:
+            self.grade = 'B-'
+        elif self.overall_score >= 68:
+            self.grade = 'C+'
+        elif self.overall_score >= 62:
+            self.grade = 'C'
+        elif self.overall_score >= 56:
+            self.grade = 'C-'
+        elif self.overall_score >= 50:
+            self.grade = 'D+'
+        elif self.overall_score >= 44:
+            self.grade = 'D'
+        elif self.overall_score >= 40:
+            self.grade = 'D-'
+        else:
+            self.grade = 'F'
 
-            queryset = queryset.filter(resume__user__id__in=applied_user_ids)
-        return queryset[:limit]
+        super().save(*args, **kwargs)
+
 
 class ScoringJob(models.Model):
     """
-    Track scoring jobs for monitoring and debugging.
+    Track background scoring jobs.
     """
-    status_choices = (
+    STATUS_CHOICES = [
         ('pending', 'Pending'),
         ('processing', 'Processing'),
         ('completed', 'Completed'),
         ('failed', 'Failed'),
-    )
+    ]
 
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, related_name='scoring_jobs')
-    status = models.CharField(max_length=20, choices=status_choices, default='pending')
-    opportunities_to_score = models.IntegerField(default=0)
-    opportunities_scored = models.IntegerField(default=0)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE, null=True, blank=True)
+    opportunity = models.ForeignKey(Opportunity, on_delete=models.CASCADE, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     error_message = models.TextField(blank=True)
-    started_at = models.DateTimeField(auto_now_add=True)
-    finished_at = models.DateTimeField(blank=True, null=True)
-    completed_at = models.DateTimeField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         db_table = 'scoring_jobs'
-        ordering = ['-started_at']
+        ordering = ['-created_at']
 
     def __str__(self):
-        return f"Scoring Job {self.id} - {self.status}"
-
-
-
-
+        return f"ScoringJob {self.id}: {self.status}"
