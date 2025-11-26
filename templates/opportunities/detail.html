@@ -141,7 +141,7 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">Back to List</a>
                     {% if user.is_authenticated and user.user_type == 'volunteer' %}
-                        <button class="btn btn-success">Apply for This Opportunity</button>
+                        <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn btn-primary">Apply for This Opportunity</a>
                     {% elif not user.is_authenticated %}
                         <a href="{% url 'login' %}" class="btn btn-success">Login to Apply</a>
                     {% endif %}

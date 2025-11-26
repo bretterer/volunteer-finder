@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Apply to {{ opportunity.title }}</h1>
+<p><strong>Organization:</strong> {{ opportunity.organization }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="message">Why are you interested? (Optional)</label>
+        <textarea name="message" id="message" class="form-control" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Application</button>
+    <a href="{% url 'opportunities:detail' opportunity.id %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
