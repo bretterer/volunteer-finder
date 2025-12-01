@@ -552,6 +552,41 @@
       color: #6b7280;
     }
 
+    /* Scanning State */
+    .scanning-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .scanning-state .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .scanning-state h3 {
+      color: #2d3748;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .scanning-state p {
+      color: #718096;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
     /* AI Match Card */
     .ai-match-card {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -919,11 +954,12 @@
           </div>
         </div>
 
-        {% if top_candidates %}
+        {% if top_candidates or is_scanning_resumes %}
         <div class="candidates-section">
           <div class="candidates-header">
             <h3>Top 10 Matching Volunteers</h3>
           </div>
+          {% if top_candidates %}
           <div class="table-container">
             <table>
               <thead>
@@ -988,6 +1024,13 @@
               </tbody>
             </table>
           </div>
+          {% else %}
+          <div class="scanning-state">
+            <div class="spinner"></div>
+            <h3>Scanning Resumes for Matches</h3>
+            <p>Our AI is analyzing volunteer resumes to find the best matches for your opportunity.<br>Refresh the page in a few minutes to see your top candidates!</p>
+          </div>
+          {% endif %}
         </div>
         {% endif %}
       </div>
