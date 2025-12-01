@@ -87,10 +87,13 @@ WSGI_APPLICATION = 'volunteer_finder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Use test database if TEST_DATABASE environment variable is set
+TEST_DATABASE = os.environ.get('TEST_DATABASE')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': TEST_DATABASE if TEST_DATABASE else BASE_DIR / 'db.sqlite3',
     }
 }
 
