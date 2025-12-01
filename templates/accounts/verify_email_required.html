@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Verify Your Email - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .logo h1 {
+      color: white;
+      font-size: 2rem;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 0.5rem;
+    }
+
+    .logo p {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1rem;
+    }
+
+    .card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .icon svg {
+      width: 40px;
+      height: 40px;
+      color: white;
+    }
+
+    h2 {
+      color: #2d3748;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .message {
+      color: #4a5568;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .email-highlight {
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+      border-left: 4px solid;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left-color: #dc2626;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left-color: #10b981;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border-left-color: #3b82f6;
+    }
+
+    .resend-form {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .resend-text {
+      color: #718096;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    button[type="submit"] {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    }
+
+    button[type="submit"]:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(0);
+    }
+
+    .footer-links {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .footer-links form {
+      display: inline;
+    }
+
+    .footer-links button {
+      background: none;
+      border: none;
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 0;
+      transition: opacity 0.2s;
+    }
+
+    .footer-links button:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 1rem 0.5rem;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+
+      .logo h1 {
+        font-size: 1.5rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">
+      <h1>Volunteer Finder</h1>
+      <p>Almost there!</p>
+    </div>
+
+    <div class="card">
+      <div class="icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+
+      <h2>Verify Your Email</h2>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert {% if message.tags == 'error' %}alert-error{% elif message.tags == 'success' %}alert-success{% else %}alert-info{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <p class="message">
+        We've sent a verification email to<br>
+        <span class="email-highlight">{{ email }}</span>
+      </p>
+
+      <p class="message">
+        Please check your inbox and click the verification link to complete your registration.
+      </p>
+
+      <div class="resend-form">
+        <p class="resend-text">Didn't receive the email?</p>
+        <form method="post" action="{% url 'resend_verification_email' %}">
+          {% csrf_token %}
+          <button type="submit">Resend Verification Email</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
