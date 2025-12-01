@@ -101,6 +101,7 @@ def opportunity_detail(request, pk):
     top_candidates = []
     volunteer_score = None
     volunteer_application = None
+    is_scanning_resumes = False
 
     if request.user.is_authenticated:
         from resumes.models import Resume, ResumeScore
@@ -111,6 +112,10 @@ def opportunity_detail(request, pk):
                 opportunity=opportunity,
                 overall_score__gt=0
             ).select_related('resume', 'resume__user').order_by('-overall_score')[:10]
+
+            # If no candidates yet, show scanning message
+            if not top_candidates:
+                is_scanning_resumes = True
 
             # Attach application status to each candidate
             for candidate in top_candidates:
@@ -139,6 +144,7 @@ def opportunity_detail(request, pk):
         'top_candidates': top_candidates,
         'volunteer_score': volunteer_score,
         'volunteer_application': volunteer_application,
+        'is_scanning_resumes': is_scanning_resumes,
     })
 
 
