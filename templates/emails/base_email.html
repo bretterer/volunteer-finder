@@ -37,7 +37,11 @@
                                 {{ subject }}
                             </h2>
                             <div style="color: #4b5563; font-size: 16px; line-height: 1.6;">
-                                {{ body|linebreaks }}
+                                {% if '<p>' in body or '<table' in body %}
+                                    {{ body|safe }}
+                                {% else %}
+                                    {{ body|linebreaks }}
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

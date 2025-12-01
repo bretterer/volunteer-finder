@@ -1,5 +1,8 @@
+import secrets
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your models here.
 
@@ -16,6 +19,7 @@ class User(AbstractUser):
 
     user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES)
     phone = models.CharField(max_length=15, blank=True, null=True)
+    email_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -71,3 +75,71 @@ class OrganizationProfile(models.Model):
 
     def __str__(self):
         return f"Organization: {self.organization_name}"
+
+
+class PasswordResetToken(models.Model):
+    """
+    Stores password reset tokens for secure password recovery.
+    Tokens expire after 1 hour.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_tokens')
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'password_reset_tokens'
+
+    def __str__(self):
+        return f"Password Reset Token for {self.user.username}"
+
+    @classmethod
+    def create_for_user(cls, user):
+        """Create a new password reset token for a user."""
+        # Invalidate any existing unused tokens for this user
+        cls.objects.filter(user=user, used=False).update(used=True)
+        # Generate a secure random token
+        token = secrets.token_urlsafe(48)
+        return cls.objects.create(user=user, token=token)
+
+    def is_valid(self):
+        """Check if the token is still valid (not used and not expired)."""
+        if self.used:
+            return False
+        # Token expires after 1 hour
+        expiry_time = self.created_at + timedelta(hours=1)
+        return timezone.now() < expiry_time
+
+
+class EmailVerificationToken(models.Model):
+    """
+    Stores email verification tokens for new account verification.
+    Tokens expire after 24 hours.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_verification_tokens')
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'email_verification_tokens'
+
+    def __str__(self):
+        return f"Email Verification Token for {self.user.username}"
+
+    @classmethod
+    def create_for_user(cls, user):
+        """Create a new email verification token for a user."""
+        # Invalidate any existing unused tokens for this user
+        cls.objects.filter(user=user, used=False).update(used=True)
+        # Generate a secure random token
+        token = secrets.token_urlsafe(48)
+        return cls.objects.create(user=user, token=token)
+
+    def is_valid(self):
+        """Check if the token is still valid (not used and not expired)."""
+        if self.used:
+            return False
+        # Token expires after 24 hours
+        expiry_time = self.created_at + timedelta(hours=24)
+        return timezone.now() < expiry_time

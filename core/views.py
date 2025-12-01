@@ -11,6 +11,7 @@ import json
 
 from opportunities.models import Opportunity, Application
 from accounts.models import User, VolunteerProfile, OrganizationProfile
+from accounts.views import email_verified_required
 from core.email import send_email
 
 
@@ -23,6 +24,7 @@ def home(request):
     return render(request, 'home.html')
 
 @login_required
+@email_verified_required
 def volunteer_dashboard(request):
     """Dashboard for volunteer users."""
     # Get volunteer's applications
@@ -46,6 +48,7 @@ def volunteer_dashboard(request):
     return render(request, 'dashboards/volunteer_dashboard.html', context)
 
 @login_required
+@email_verified_required
 def organization_dashboard(request):
     """Dashboard for organization users."""
     # Get organization's opportunities
@@ -76,6 +79,7 @@ def organization_dashboard(request):
     return render(request, 'dashboards/organization_dashboard.html', context)
 
 @login_required
+@email_verified_required
 def admin_dashboard(request):
     """Dashboard for admin users."""
     # Get overall stats
