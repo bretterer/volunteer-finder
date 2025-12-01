@@ -1,90 +1,617 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% if existing_resume %}Update{% else %}Upload{% endif %} Resume - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{% block title %}Upload Resume - Volunteer Finder{% endblock %}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
 
-{% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">
-                        <i class="fas fa-file-upload me-2"></i>
-                        {% if existing_resume %}Update Your Resume{% else %}Upload Your Resume{% endif %}
-                    </h4>
-                </div>
-                <div class="card-body">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                                {{ message }}
-                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-                    {% if existing_resume %}
-                        <div class="alert alert-info">
-                            <strong>Current Resume:</strong> {{ existing_resume.original_filename }}
-                            <br>
-                            <small class="text-muted">Uploaded: {{ existing_resume.uploaded_at|date:"M d, Y H:i" }}</small>
-                        </div>
-                    {% endif %}
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
+    .header h1 { font-size: 1.8rem; font-weight: 600; }
 
-                        <div class="mb-4">
-                            <label for="{{ form.file.id_for_label }}" class="form-label fw-bold">
-                                {{ form.file.label }}
-                            </label>
-                            {{ form.file }}
-                            {% if form.file.help_text %}
-                                <div class="form-text">{{ form.file.help_text }}</div>
-                            {% endif %}
-                            {% if form.file.errors %}
-                                <div class="invalid-feedback d-block">
-                                    {% for error in form.file.errors %}{{ error }}{% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-cloud-upload-alt me-2"></i>
-                                {% if existing_resume %}Update Resume{% else %}Upload Resume{% endif %}
-                            </button>
-                        </div>
-                    </form>
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
 
-                    {% if existing_resume %}
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                            <a href="{% url 'resumes:my_resume' %}" class="btn btn-outline-primary">
-                                <i class="fas fa-eye me-2"></i>View My Matches
-                            </a>
-                            <a href="{% url 'resumes:delete' %}" class="btn btn-outline-danger"
-                               onclick="return confirm('Are you sure you want to delete your resume?');">
-                                <i class="fas fa-trash me-2"></i>Delete Resume
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
+    .header-nav a:hover { opacity: 0.8; }
 
-            <!-- How it works -->
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h5><i class="fas fa-info-circle me-2 text-primary"></i>How It Works</h5>
-                    <ol class="mb-0">
-                        <li>Upload your resume (PDF, DOCX, or TXT)</li>
-                        <li>Our AI analyzes your skills and experience</li>
-                        <li>You get matched with relevant volunteer opportunities</li>
-                        <li>View your top matches and apply!</li>
-                    </ol>
-                </div>
-            </div>
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .dropdown-toggle::after {
+      content: '▼';
+      font-size: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 180px;
+      padding: 0.5rem 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #2d3748 !important;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f7fafc;
+      opacity: 1 !important;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.5rem 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 3px solid #10b981;
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 3px solid #ef4444;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .current-resume {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .current-resume-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .current-resume-info {
+      flex: 1;
+    }
+
+    .current-resume-name {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .current-resume-date {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+    }
+
+    .file-upload-wrapper {
+      position: relative;
+      border: 2px dashed #cbd5e0;
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: #f7fafc;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+
+    .file-upload-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .file-upload-text {
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .file-upload-hint {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .file-upload-wrapper input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .file-upload-wrapper.file-selected {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+
+    .file-upload-wrapper.file-selected .file-upload-icon {
+      color: #22c55e;
+    }
+
+    .btn {
+      padding: 0.875rem 1.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .action-buttons .btn {
+      flex: 1;
+      width: auto;
+    }
+
+    /* How it works */
+    .how-it-works {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .how-it-works h3 {
+      font-size: 1.1rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .steps {
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .steps li {
+      position: relative;
+      padding-left: 3rem;
+      padding-bottom: 1.25rem;
+      counter-increment: step;
+    }
+
+    .steps li:last-child {
+      padding-bottom: 0;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2rem;
+      height: 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .steps li::after {
+      content: '';
+      position: absolute;
+      left: 0.9375rem;
+      top: 2rem;
+      bottom: 0;
+      width: 2px;
+      background: #e2e8f0;
+    }
+
+    .steps li:last-child::after {
+      display: none;
+    }
+
+    .step-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.25rem;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      color: #718096;
+    }
+
+    .error-message {
+      color: #dc2626;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Finder</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:list' %}">Opportunities</a>
+        <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+        <div class="dropdown">
+          <span class="dropdown-toggle">Profile</span>
+          <div class="dropdown-menu">
+            <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+            <a href="{% url 'resumes:upload' %}">Upload Resume</a>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+          </div>
         </div>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
     </div>
-</div>
-{% endblock %}
+  </header>
+
+  <main class="container">
+    <a href="{% url 'volunteer_dashboard' %}" class="back-link">
+      ← Back to Dashboard
+    </a>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header">
+        <h2>{% if existing_resume %}Update Your Resume{% else %}Upload Your Resume{% endif %}</h2>
+      </div>
+      <div class="card-body">
+        {% if existing_resume %}
+          <div class="current-resume">
+            <div class="current-resume-icon">📄</div>
+            <div class="current-resume-info">
+              <div class="current-resume-name">{{ existing_resume.original_filename }}</div>
+              <div class="current-resume-date">Uploaded {{ existing_resume.uploaded_at|date:"M d, Y" }} at {{ existing_resume.uploaded_at|time:"H:i" }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label class="form-label" for="fileInput">Resume File</label>
+            <div class="file-upload-wrapper" id="fileUploadArea">
+              <div class="file-upload-icon">📤</div>
+              <div class="file-upload-text" id="fileText">
+                {% if existing_resume %}
+                  Drop a new file here or click to browse
+                {% else %}
+                  Drop your resume here or click to browse
+                {% endif %}
+              </div>
+              <div class="file-upload-hint">Supported formats: PDF, DOCX, TXT (Max 5MB)</div>
+              <input type="file" name="file" id="fileInput" accept=".pdf,.docx,.doc,.txt" required>
+            </div>
+            {% if form.file.errors %}
+              <div class="error-message">
+                {% for error in form.file.errors %}{{ error }}{% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            {% if existing_resume %}Update Resume{% else %}Upload Resume{% endif %}
+          </button>
+        </form>
+
+        {% if existing_resume %}
+          <div class="action-buttons">
+            <a href="{% url 'resumes:my_resume' %}" class="btn btn-secondary">
+              View My Matches
+            </a>
+            <a href="{% url 'resumes:delete' %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete your resume? This will also remove all your match scores.');">
+              Delete Resume
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="how-it-works">
+      <h3>ℹ️ How It Works</h3>
+      <ol class="steps">
+        <li>
+          <div class="step-title">Upload your resume</div>
+          <div class="step-desc">Submit your resume in PDF, DOCX, or TXT format</div>
+        </li>
+        <li>
+          <div class="step-title">AI analyzes your profile</div>
+          <div class="step-desc">Our system extracts your skills and experience</div>
+        </li>
+        <li>
+          <div class="step-title">Get matched with opportunities</div>
+          <div class="step-desc">We score how well you match each volunteer opportunity</div>
+        </li>
+        <li>
+          <div class="step-title">Apply to your top matches</div>
+          <div class="step-desc">View your personalized rankings and apply directly</div>
+        </li>
+      </ol>
+    </div>
+  </main>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileText = document.getElementById('fileText');
+    const defaultText = '{% if existing_resume %}Drop a new file here or click to browse{% else %}Drop your resume here or click to browse{% endif %}';
+
+    // Click on wrapper to trigger file input
+    fileUploadArea.addEventListener('click', function(e) {
+      if (e.target !== fileInput) {
+        fileInput.click();
+      }
+    });
+
+    fileInput.addEventListener('change', function() {
+      if (this.files.length > 0) {
+        fileUploadArea.classList.add('file-selected');
+        fileText.textContent = this.files[0].name;
+      } else {
+        fileUploadArea.classList.remove('file-selected');
+        fileText.textContent = defaultText;
+      }
+    });
+
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#667eea';
+      this.style.background = '#f0f4ff';
+    });
+
+    fileUploadArea.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#cbd5e0';
+      this.style.background = '#f7fafc';
+    });
+
+    fileUploadArea.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = '#cbd5e0';
+      this.style.background = '#f7fafc';
+      if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+  </script>
+</body>
+</html>

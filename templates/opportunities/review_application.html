@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Review Application - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 { font-size: 1.8rem; font-weight: 600; }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover { opacity: 0.8; }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 3px solid #10b981;
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 3px solid #ef4444;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h2 {
+      font-size: 1.2rem;
+      color: #2d3748;
+    }
+
+    .card-body {
+      padding: 1.5rem;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-withdrawn {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f7fafc;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+    }
+
+    .message-box {
+      background: #f7fafc;
+      border-radius: 8px;
+      padding: 1rem;
+      color: #4a5568;
+      line-height: 1.6;
+      border-left: 3px solid #667eea;
+    }
+
+    .message-box.empty {
+      color: #a0aec0;
+      font-style: italic;
+      border-left-color: #e2e8f0;
+    }
+
+    /* Match Score Section */
+    .score-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .score-value {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .score-label {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    .score-grade {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+      margin-top: 0.75rem;
+    }
+
+    .score-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .score-detail {
+      text-align: center;
+    }
+
+    .score-detail-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .score-detail-label {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* Decision Form */
+    .decision-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .decision-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .decision-header h3 {
+      font-size: 1.1rem;
+      color: #2d3748;
+    }
+
+    .decision-body {
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 100px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-hint {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-top: 0.35rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-accept {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+    }
+
+    .btn-accept:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+    }
+
+    .btn-reject {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .btn-reject:hover {
+      background: #fecaca;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .decided-message {
+      text-align: center;
+      padding: 1rem;
+      color: #718096;
+    }
+
+    .decided-message strong {
+      color: #2d3748;
+    }
+
+    /* Sidebar Info */
+    .sidebar-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-card h3 {
+      font-size: 1rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid #f7fafc;
+    }
+
+    .volunteer-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .volunteer-email {
+      color: #667eea;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .volunteer-email:hover {
+      text-decoration: underline;
+    }
+
+    .resume-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.5rem 0;
+    }
+
+    .resume-link:hover {
+      color: #764ba2;
+    }
+
+    .no-resume {
+      color: #a0aec0;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 968px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Finder</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:list' %}">Opportunities</a>
+        <a href="{% url 'organization_dashboard' %}">Dashboard</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <a href="{% url 'organization_dashboard' %}" class="back-link">
+      ← Back to Dashboard
+    </a>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <h1 class="page-title">Review Application</h1>
+
+    <div class="content-grid">
+      <div class="main-content">
+        <!-- Application Details -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Application for {{ application.opportunity.title }}</h2>
+            <span class="status-badge status-{{ application.status }}">
+              {{ application.get_status_display }}
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="info-row">
+              <span class="info-label">Applied On</span>
+              <span class="info-value">{{ application.applied_at|date:"M d, Y H:i" }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Opportunity</span>
+              <span class="info-value">
+                <a href="{% url 'opportunities:detail' application.opportunity.pk %}" style="color: #667eea; text-decoration: none;">
+                  {{ application.opportunity.title }}
+                </a>
+              </span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Location</span>
+              <span class="info-value">{{ application.opportunity.location }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Start Date</span>
+              <span class="info-value">{{ application.opportunity.start_date|date:"M d, Y" }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Applicant's Message -->
+        <div class="card">
+          <div class="card-header">
+            <h2>Applicant's Message</h2>
+          </div>
+          <div class="card-body">
+            {% if application.message %}
+              <div class="message-box">
+                {{ application.message|linebreaks }}
+              </div>
+            {% else %}
+              <div class="message-box empty">
+                No message provided with this application.
+              </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Decision Form -->
+        <div class="decision-card">
+          <div class="decision-header">
+            <h3>Make a Decision</h3>
+          </div>
+          <div class="decision-body">
+            {% if application.status == 'pending' %}
+              <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                  <label class="form-label" for="feedback">Feedback (Optional)</label>
+                  <textarea
+                    class="form-textarea"
+                    id="feedback"
+                    name="feedback"
+                    placeholder="Add a message for the volunteer..."
+                  ></textarea>
+                  <p class="form-hint">This feedback will be sent to the volunteer via email.</p>
+                </div>
+                <div class="btn-group">
+                  <button type="submit" name="action" value="accept" class="btn btn-accept">
+                    ✓ Accept Application
+                  </button>
+                  <button type="submit" name="action" value="reject" class="btn btn-reject">
+                    ✗ Decline Application
+                  </button>
+                </div>
+              </form>
+            {% else %}
+              <div class="decided-message">
+                <p>This application has been <strong>{{ application.get_status_display|lower }}</strong>.</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                  {% if application.status == 'accepted' %}
+                    The volunteer has been notified of their acceptance.
+                  {% elif application.status == 'rejected' %}
+                    The volunteer has been notified of this decision.
+                  {% elif application.status == 'withdrawn' %}
+                    This application was withdrawn by the volunteer.
+                  {% endif %}
+                </p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <!-- Volunteer Info -->
+        <div class="sidebar-card">
+          <h3>Volunteer Information</h3>
+          <div class="volunteer-name">{{ application.volunteer.get_full_name|default:application.volunteer.username }}</div>
+          <a href="mailto:{{ application.volunteer.email }}" class="volunteer-email">
+            {{ application.volunteer.email }}
+          </a>
+
+          {% if volunteer_profile %}
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f7fafc;">
+              {% if volunteer_profile.phone %}
+                <div class="info-row">
+                  <span class="info-label">Phone</span>
+                  <span class="info-value">{{ volunteer_profile.phone }}</span>
+                </div>
+              {% endif %}
+              {% if volunteer_profile.hours_completed %}
+                <div class="info-row">
+                  <span class="info-label">Hours Completed</span>
+                  <span class="info-value">{{ volunteer_profile.hours_completed }}h</span>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- AI Match Score -->
+        {% if resume_score %}
+          <div class="score-card">
+            <div class="score-value">{{ resume_score.overall_score }}</div>
+            <div class="score-label">AI Match Score</div>
+            <div class="score-grade">Grade: {{ resume_score.grade }}</div>
+            <div class="score-details">
+              <div class="score-detail">
+                <div class="score-detail-value">{{ resume_score.skills_score }}</div>
+                <div class="score-detail-label">Skills</div>
+              </div>
+              <div class="score-detail">
+                <div class="score-detail-value">{{ resume_score.experience_score }}</div>
+                <div class="score-detail-label">Experience</div>
+              </div>
+            </div>
+          </div>
+
+          {% if resume_score.recommendation %}
+            <div class="sidebar-card">
+              <h3>AI Recommendation</h3>
+              <p style="color: #4a5568; line-height: 1.6; font-size: 0.9rem;">
+                {{ resume_score.recommendation }}
+              </p>
+              {% if resume_score.key_strength %}
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #f7fafc;">
+                  <strong style="color: #065f46; font-size: 0.85rem;">Key Strength:</strong>
+                  <p style="color: #4a5568; font-size: 0.9rem; margin-top: 0.25rem;">{{ resume_score.key_strength }}</p>
+                </div>
+              {% endif %}
+              {% if resume_score.concerns %}
+                <div style="margin-top: 0.75rem;">
+                  <strong style="color: #92400e; font-size: 0.85rem;">Concerns:</strong>
+                  <p style="color: #4a5568; font-size: 0.9rem; margin-top: 0.25rem;">{{ resume_score.concerns }}</p>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Resume Link -->
+        <div class="sidebar-card">
+          <h3>Resume</h3>
+          {% if volunteer_resume %}
+            <a href="{{ volunteer_resume.file.url }}" target="_blank" class="resume-link">
+              📄 {{ volunteer_resume.original_filename }}
+            </a>
+            <p style="font-size: 0.8rem; color: #718096; margin-top: 0.25rem;">
+              Uploaded {{ volunteer_resume.uploaded_at|date:"M d, Y" }}
+            </p>
+          {% else %}
+            <p class="no-resume">No resume uploaded</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,181 +1,1143 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{ opportunity.title }} - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{% block title %}{{ opportunity.title }} - Volunteer Match{% endblock %}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
 
-{% block content %}
-<div class="row">
-    <div class="col-lg-8">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h2 class="mb-0">{{ opportunity.title }}</h2>
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 { font-size: 1.8rem; font-weight: 600; }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover { opacity: 0.8; }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .dropdown-toggle::after {
+      content: '▼';
+      font-size: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 180px;
+      padding: 0.5rem 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #2d3748 !important;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f7fafc;
+      opacity: 1 !important;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.5rem 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 2rem;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem 2rem;
+    }
+
+    .card-header h2 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-header .organization {
+      opacity: 0.9;
+      font-size: 1rem;
+    }
+
+    .card-body {
+      padding: 2rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .section p {
+      color: #4a5568;
+      line-height: 1.7;
+    }
+
+    .org-description {
+      color: #718096;
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .detail-item {
+      background: #f7fafc;
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 3px solid #667eea;
+    }
+
+    .detail-label {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-bottom: 0.25rem;
+    }
+
+    .detail-value {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.4rem 0.9rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+    }
+
+    .btn-success:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+    }
+
+    /* Sidebar */
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .sidebar-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .sidebar-card h3 {
+      font-size: 1.1rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #f7fafc;
+    }
+
+    .info-list {
+      list-style: none;
+    }
+
+    .info-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #f7fafc;
+    }
+
+    .info-list li:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .info-value {
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-closed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* Top Candidates Table */
+    .candidates-section {
+      margin-top: 2rem;
+    }
+
+    .candidates-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .candidates-header h3 {
+      font-size: 1.2rem;
+      color: #2d3748;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .rank-top {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      color: white;
+    }
+
+    .rank-normal {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .score-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .score-high {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .score-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .score-low {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .candidate-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .candidate-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .candidate-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .candidate-waitlist {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .candidate-pending {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+      margin-right: 0.25rem;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .action-accept {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .action-accept:hover {
+      background: #a7f3d0;
+    }
+
+    .action-waitlist {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .action-waitlist:hover {
+      background: #fde68a;
+    }
+
+    .action-reject {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .action-reject:hover {
+      background: #fecaca;
+    }
+
+    .action-reset {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .action-reset:hover {
+      background: #cbd5e0;
+    }
+
+    .action-invite {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .action-invite:hover {
+      background: #bfdbfe;
+    }
+
+    .candidate-not-applied {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    /* Scanning State */
+    .scanning-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .scanning-state .spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .scanning-state h3 {
+      color: #2d3748;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .scanning-state p {
+      color: #718096;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* AI Match Card */
+    .ai-match-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.5rem;
+    }
+
+    .ai-match-card h3 {
+      color: white;
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .ai-match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .ai-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .ai-grade {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .grade-a { color: #86efac; }
+    .grade-b { color: #fde047; }
+    .grade-c { color: #fdba74; }
+    .grade-d, .grade-f { color: #fca5a5; }
+
+    .ai-score-display {
+      text-align: center;
+      padding: 1rem 0;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      margin-bottom: 1rem;
+    }
+
+    .ai-score-value {
+      font-size: 3rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .ai-score-label {
+      font-size: 0.85rem;
+      opacity: 0.9;
+      margin-top: 0.25rem;
+    }
+
+    .ai-score-breakdown {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .ai-score-item {
+      text-align: center;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+    }
+
+    .ai-score-item-value {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .ai-score-item-label {
+      font-size: 0.7rem;
+      opacity: 0.8;
+      text-transform: uppercase;
+    }
+
+    .ai-insight {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .ai-insight-warning {
+      background: rgba(251, 191, 36, 0.2);
+    }
+
+    .ai-insight-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-bottom: 0.25rem;
+    }
+
+    .ai-insight-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    /* Application Status Badge */
+    .application-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-left: 1rem;
+    }
+
+    .application-status-pending {
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+
+    .application-status-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .application-status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .application-status-withdrawn {
+      background: rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.8);
+    }
+
+    .card-header-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn-disabled {
+      background: #cbd5e0 !important;
+      color: #718096 !important;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn-disabled:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 3px solid #10b981;
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 3px solid #ef4444;
+    }
+
+    @media (max-width: 968px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Finder</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:list' %}">Opportunities</a>
+        {% if user.is_authenticated %}
+          {% if user.user_type == 'volunteer' %}
+            <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+            <div class="dropdown">
+              <span class="dropdown-toggle">Profile</span>
+              <div class="dropdown-menu">
+                <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+                <a href="{% url 'resumes:upload' %}">Upload Resume</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+              </div>
             </div>
-            <div class="card-body">
-                <!-- Organization Info -->
-                <div class="mb-4">
-                    <h5>Organization</h5>
-                    <p class="lead">{{ opportunity.organization.organization_profile.organization_name }}</p>
-                    {% if opportunity.organization.organization_profile.description %}
-                        <p class="text-muted">{{ opportunity.organization.organization_profile.description }}</p>
-                    {% endif %}
-                </div>
-
-                <!-- Description -->
-                <div class="mb-4">
-                    <h5>Description</h5>
-                    <p>{{ opportunity.description }}</p>
-                </div>
-
-                <!-- Details -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h5>Location</h5>
-                        <p>{{ opportunity.location }}</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Dates</h5>
-                        <p>
-                            <strong>Start:</strong> {{ opportunity.start_date }}<br>
-                            {% if opportunity.end_date %}
-                                <strong>End:</strong> {{ opportunity.end_date }}
-                            {% else %}
-                                <span class="text-muted">Single day event</span>
-                            {% endif %}
-                        </p>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <h5>Time Commitment</h5>
-                        <p>{{ opportunity.hours_required }} hours</p>
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Spots Available</h5>
-                        <p>{{ opportunity.spots_available }}</p>
-                    </div>
-                </div>
-
-                <!-- Required Skills -->
-                {% if opportunity.required_skills %}
-                <div class="mb-4">
-                    <h5>Required Skills</h5>
-                    <div>
-                        {% for skill in opportunity.required_skills %}
-                            <span class="badge bg-primary me-1">{{ skill }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Top 10 Candidates (Only visible to opportunity owner) -->
-                {% if top_candidates %}
-                <div class="mb-4">
-                    <h5>🏆 Top 10 Matching Volunteers</h5>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Volunteer</th>
-                                    <th>Match Score</th>
-                                    <th>Grade</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for score in top_candidates %}
-                                <tr>
-                                    <td>
-                                        <span class="badge {% if forloop.counter <= 3 %}bg-success{% else %}bg-primary{% endif %}">
-                                            #{{ forloop.counter }}
-                                        </span>
-                                    </td>
-                                    <td>{{ score.resume.user.username }}</td>
-                                    <td>
-                                        <span class="badge {% if score.overall_score >= 80 %}bg-success{% elif score.overall_score >= 60 %}bg-warning{% else %}bg-secondary{% endif %}">
-                                            {{ score.overall_score }}/100
-                                        </span>
-                                    </td>
-                                    <td>{{ score.grade }}</td>
-                                    <td>
-                                        <span class="badge {% if score.acceptance_status == 'accepted' %}bg-success{% elif score.acceptance_status == 'rejected' %}bg-danger{% elif score.acceptance_status == 'waitlist' %}bg-warning{% else %}bg-secondary{% endif %}">
-                                            {{ score.get_acceptance_status_display }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {% if score.acceptance_status != 'accepted' %}
-                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'accepted' %}"
-                                               class="btn btn-sm btn-success" title="Accept">
-                                                ✓
-                                            </a>
-                                        {% endif %}
-                                        {% if score.acceptance_status != 'waitlist' %}
-                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'waitlist' %}"
-                                               class="btn btn-sm btn-warning" title="Waitlist">
-                                                ⏳
-                                            </a>
-                                        {% endif %}
-                                        {% if score.acceptance_status != 'rejected' %}
-                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'rejected' %}"
-                                               class="btn btn-sm btn-danger" title="Reject">
-                                                ✗
-                                            </a>
-                                        {% endif %}
-                                        {% if score.acceptance_status != 'pending' %}
-                                            <a href="{% url 'opportunities:update_candidate_status' opportunity.pk score.id 'pending' %}"
-                                               class="btn btn-sm btn-secondary" title="Reset">
-                                                ↺
-                                            </a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                {% endif %}
-
-                <!-- Action Buttons -->
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">Back to List</a>
-                    {% if user.is_authenticated and user.user_type == 'volunteer' %}
-                        <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn btn-primary">Apply for This Opportunity</a>
-                    {% elif not user.is_authenticated %}
-                        <a href="{% url 'login' %}" class="btn btn-success">Login to Apply</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+          {% elif user.user_type == 'organization' %}
+            <a href="{% url 'organization_dashboard' %}">Dashboard</a>
+          {% endif %}
+          <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+            {% csrf_token %}
+            <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register_volunteer' %}">Sign Up</a>
+        {% endif %}
+      </nav>
     </div>
+  </header>
 
-    <!-- Sidebar -->
-    <div class="col-lg-4">
-        <div class="card shadow">
-            <div class="card-header">
-                <h5 class="mb-0">Quick Info</h5>
-            </div>
-            <div class="card-body">
-                <ul class="list-unstyled">
-                    <li class="mb-2">
-                        <strong>Status:</strong>
-                        <span class="badge bg-success">{{ opportunity.get_status_display }}</span>
-                    </li>
-                    <li class="mb-2">
-                        <strong>Posted:</strong> {{ opportunity.created_at|date:"M d, Y" }}
-                    </li>
-                    {% if opportunity.organization.organization_profile.website %}
-                    <li class="mb-2">
-                        <strong>Website:</strong><br>
-                        <a href="{{ opportunity.organization.organization_profile.website }}" target="_blank">
-                            Visit organization
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
-            </div>
+  <main class="container">
+    <a href="{% url 'opportunities:list' %}" class="back-link">
+      ← Back to Opportunities
+    </a>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
         </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="content-grid">
+      <div class="main-content">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-header-row">
+              <h2>{{ opportunity.title }}</h2>
+              {% if volunteer_application %}
+                <span class="application-status application-status-{{ volunteer_application.status }}">
+                  {% if volunteer_application.status == 'pending' %}
+                    ⏳ Application Pending
+                  {% elif volunteer_application.status == 'accepted' %}
+                    ✓ Application Accepted
+                  {% elif volunteer_application.status == 'rejected' %}
+                    ✗ Application Declined
+                  {% elif volunteer_application.status == 'withdrawn' %}
+                    Withdrawn
+                  {% endif %}
+                </span>
+              {% endif %}
+            </div>
+            <div class="organization">
+              {{ opportunity.organization.organization_profile.organization_name }}
+            </div>
+          </div>
+          <div class="card-body">
+            {% if opportunity.organization.organization_profile.description %}
+            <div class="section">
+              <h3 class="section-title">About the Organization</h3>
+              <p class="org-description">{{ opportunity.organization.organization_profile.description }}</p>
+            </div>
+            {% endif %}
+
+            <div class="section">
+              <h3 class="section-title">Description</h3>
+              <p>{{ opportunity.description }}</p>
+            </div>
+
+            <div class="section">
+              <h3 class="section-title">Details</h3>
+              <div class="details-grid">
+                <div class="detail-item">
+                  <div class="detail-label">Location</div>
+                  <div class="detail-value">{{ opportunity.location }}</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Start Date</div>
+                  <div class="detail-value">{{ opportunity.start_date|date:"M d, Y" }}</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">End Date</div>
+                  <div class="detail-value">
+                    {% if opportunity.end_date %}
+                      {{ opportunity.end_date|date:"M d, Y" }}
+                    {% else %}
+                      Single day event
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Time Commitment</div>
+                  <div class="detail-value">{{ opportunity.hours_required }} hours</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Spots Available</div>
+                  <div class="detail-value">{{ opportunity.spots_available }}</div>
+                </div>
+              </div>
+            </div>
+
+            {% if opportunity.required_skills %}
+            <div class="section">
+              <h3 class="section-title">Required Skills</h3>
+              <div class="skills-container">
+                {% for skill in opportunity.required_skills %}
+                  <span class="skill-tag">{{ skill }}</span>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <div class="action-buttons">
+              <a href="{% url 'opportunities:list' %}" class="btn btn-secondary">Back to List</a>
+              {% if user.is_authenticated and user == opportunity.organization %}
+                <a href="{% url 'opportunities:edit' pk=opportunity.pk %}" class="btn btn-primary">Edit Opportunity</a>
+              {% endif %}
+              {% if user.is_authenticated and user.user_type == 'volunteer' %}
+                {% if volunteer_application and volunteer_application.status == 'pending' %}
+                  <span class="btn btn-disabled">Application Pending</span>
+                {% elif volunteer_application and volunteer_application.status == 'accepted' %}
+                  <span class="btn btn-disabled">Already Accepted</span>
+                {% elif volunteer_application and volunteer_application.status == 'withdrawn' %}
+                  <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn btn-primary">Re-Apply for This Opportunity</a>
+                {% elif volunteer_application and volunteer_application.status == 'rejected' %}
+                  <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn btn-primary">Re-Apply for This Opportunity</a>
+                {% else %}
+                  <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn btn-primary">Apply for This Opportunity</a>
+                {% endif %}
+              {% elif not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn btn-success">Login to Apply</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        {% if top_candidates or is_scanning_resumes %}
+        <div class="candidates-section">
+          <div class="candidates-header">
+            <h3>Top 10 Matching Volunteers</h3>
+          </div>
+          {% if top_candidates %}
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Volunteer</th>
+                  <th>Match Score</th>
+                  <th>Grade</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for score in top_candidates %}
+                <tr>
+                  <td>
+                    <span class="rank-badge {% if forloop.counter <= 3 %}rank-top{% else %}rank-normal{% endif %}">
+                      {{ forloop.counter }}
+                    </span>
+                  </td>
+                  <td><strong>{{ score.resume.user.username }}</strong></td>
+                  <td>
+                    <span class="score-badge {% if score.overall_score >= 80 %}score-high{% elif score.overall_score >= 60 %}score-medium{% else %}score-low{% endif %}">
+                      {{ score.overall_score }}/100
+                    </span>
+                  </td>
+                  <td>{{ score.grade }}</td>
+                  <td>
+                    {% if score.application %}
+                      <span class="candidate-status candidate-{{ score.application.status }}">
+                        {{ score.application.get_status_display }}
+                      </span>
+                    {% else %}
+                      <span class="candidate-status candidate-not-applied">
+                        Not Applied
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if score.application and score.application.status == 'pending' %}
+                      <a href="{% url 'opportunities:review_application' score.application.id %}"
+                         class="action-btn action-accept" title="Accept">
+                        ✓
+                      </a>
+                      <a href="{% url 'opportunities:review_application' score.application.id %}"
+                         class="action-btn action-reject" title="Reject">
+                        ✗
+                      </a>
+                    {% elif score.application and score.application.status == 'accepted' %}
+                      <span class="candidate-status candidate-accepted">Accepted</span>
+                    {% elif score.application and score.application.status == 'rejected' %}
+                      <span class="candidate-status candidate-rejected">Rejected</span>
+                    {% elif not score.application or score.application.status == 'withdrawn' %}
+                      <a href="{% url 'opportunities:invite_volunteer' opportunity.pk score.resume.user.id %}"
+                         class="action-btn action-invite" title="Send Invitation">
+                        ✉
+                      </a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="scanning-state">
+            <div class="spinner"></div>
+            <h3>Scanning Resumes for Matches</h3>
+            <p>Our AI is analyzing volunteer resumes to find the best matches for your opportunity.<br>Refresh the page in a few minutes to see your top candidates!</p>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="sidebar">
+        {% if volunteer_score %}
+        <div class="sidebar-card ai-match-card">
+          <div class="ai-match-header">
+            <span class="ai-badge">AI Match</span>
+            <span class="ai-grade grade-{{ volunteer_score.grade|slice:":1"|lower }}">{{ volunteer_score.grade }}</span>
+          </div>
+          <div class="ai-score-display">
+            <div class="ai-score-value">{{ volunteer_score.overall_score }}</div>
+            <div class="ai-score-label">Match Score</div>
+          </div>
+          <div class="ai-score-breakdown">
+            <div class="ai-score-item">
+              <div class="ai-score-item-value">{{ volunteer_score.skills_score }}</div>
+              <div class="ai-score-item-label">Skills</div>
+            </div>
+            <div class="ai-score-item">
+              <div class="ai-score-item-value">{{ volunteer_score.experience_score }}</div>
+              <div class="ai-score-item-label">Experience</div>
+            </div>
+            <div class="ai-score-item">
+              <div class="ai-score-item-value">{{ volunteer_score.education_score }}</div>
+              <div class="ai-score-item-label">Education</div>
+            </div>
+          </div>
+          {% if volunteer_score.key_strength %}
+          <div class="ai-insight">
+            <div class="ai-insight-label">Key Strength</div>
+            <div class="ai-insight-text">{{ volunteer_score.key_strength }}</div>
+          </div>
+          {% endif %}
+          {% if volunteer_score.concerns %}
+          <div class="ai-insight ai-insight-warning">
+            <div class="ai-insight-label">Areas to Highlight</div>
+            <div class="ai-insight-text">{{ volunteer_score.concerns }}</div>
+          </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="sidebar-card">
+          <h3>Quick Info</h3>
+          <ul class="info-list">
+            <li>
+              <span class="info-label">Status</span>
+              <span class="status-badge status-{{ opportunity.status }}">{{ opportunity.get_status_display }}</span>
+            </li>
+            <li>
+              <span class="info-label">Posted</span>
+              <span class="info-value">{{ opportunity.created_at|date:"M d, Y" }}</span>
+            </li>
+            <li>
+              <span class="info-label">Hours</span>
+              <span class="info-value">{{ opportunity.hours_required }}h</span>
+            </li>
+            <li>
+              <span class="info-label">Spots</span>
+              <span class="info-value">{{ opportunity.spots_available }}</span>
+            </li>
+          </ul>
+        </div>
+
+        {% if opportunity.organization.organization_profile.website %}
+        <div class="sidebar-card">
+          <h3>Organization</h3>
+          <ul class="info-list">
+            <li>
+              <span class="info-label">Website</span>
+              <a href="{{ opportunity.organization.organization_profile.website }}" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                Visit Website →
+              </a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+
+        {% if user.is_authenticated and user.user_type == 'volunteer' and not volunteer_application %}
+        <div class="sidebar-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Ready to Help?</h3>
+          <p style="margin-bottom: 1rem; opacity: 0.9; font-size: 0.95rem;">Make a difference in your community by volunteering for this opportunity.</p>
+          <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn" style="background: white; color: #667eea; width: 100%;">
+            Apply Now
+          </a>
+        </div>
+        {% elif user.is_authenticated and user.user_type == 'volunteer' and volunteer_application.status in 'withdrawn,rejected' %}
+        <div class="sidebar-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+          <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Try Again?</h3>
+          <p style="margin-bottom: 1rem; opacity: 0.9; font-size: 0.95rem;">You can re-apply for this opportunity if you're still interested.</p>
+          <a href="{% url 'opportunities:apply_to_opportunity' pk=opportunity.id %}" class="btn" style="background: white; color: #667eea; width: 100%;">
+            Re-Apply Now
+          </a>
+        </div>
+        {% elif not user.is_authenticated %}
+        <div class="sidebar-card" style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white;">
+          <h3 style="color: white; border-color: rgba(255,255,255,0.2);">Want to Apply?</h3>
+          <p style="margin-bottom: 1rem; opacity: 0.9; font-size: 0.95rem;">Sign in to your account to apply for this volunteer opportunity.</p>
+          <a href="{% url 'login' %}" class="btn" style="background: white; color: #38a169; width: 100%;">
+            Login to Apply
+          </a>
+        </div>
+        {% endif %}
+      </div>
     </div>
-</div>
-{% endblock %}
+  </main>
+</body>
+</html>

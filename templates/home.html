@@ -117,6 +117,79 @@
       box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: white;
+      font-weight: 500;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+    }
+
+    .dropdown-toggle:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .dropdown-toggle::after {
+      content: '▼';
+      font-size: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 180px;
+      padding: 0.5rem 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #2d3748 !important;
+      font-weight: 500;
+      transition: background 0.2s;
+      background: none !important;
+      box-shadow: none !important;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f7fafc !important;
+      transform: none;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.5rem 0;
+    }
+
     /* Hero Section */
     .hero {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -628,6 +701,15 @@
         {% if user.is_authenticated %}
           <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
           {% if user.user_type == 'volunteer' %}
+            <div class="dropdown">
+              <span class="dropdown-toggle">Profile</span>
+              <div class="dropdown-menu">
+                <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+                <a href="{% url 'resumes:upload' %}">Upload Resume</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+              </div>
+            </div>
             <a href="{% url 'volunteer_dashboard' %}" class="nav-btn">Dashboard</a>
           {% elif user.user_type == 'organization' %}
             <a href="{% url 'opportunities:create' %}">Post Opportunity</a>

@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Opportunity, Application
 from .forms import OpportunityForm
+from core.email import send_email
 
 
 @login_required
@@ -28,6 +29,34 @@ def create_opportunity(request):
         form = OpportunityForm()
 
     return render(request, 'opportunities/create.html', {'form': form})
+
+
+@login_required
+def edit_opportunity(request, pk):
+    """
+    View for organizations to edit their volunteer opportunities.
+    Only the organization that created the opportunity can edit it.
+    """
+    opportunity = get_object_or_404(Opportunity, pk=pk)
+
+    # Check if user owns this opportunity
+    if request.user != opportunity.organization:
+        messages.error(request, 'You do not have permission to edit this opportunity.')
+        return redirect('opportunities:detail', pk=pk)
+
+    if request.method == 'POST':
+        form = OpportunityForm(request.POST, instance=opportunity)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Opportunity updated successfully!')
+            return redirect('opportunities:detail', pk=opportunity.pk)
+    else:
+        form = OpportunityForm(instance=opportunity)
+
+    return render(request, 'opportunities/edit.html', {
+        'form': form,
+        'opportunity': opportunity,
+    })
 
 
 def list_opportunities(request):
@@ -70,16 +99,52 @@ def opportunity_detail(request, pk):
 
     # Get top 10 candidates for organizations viewing their own opportunities
     top_candidates = []
-    if request.user.is_authenticated and request.user == opportunity.organization:
-        from resumes.models import ResumeScore
-        top_candidates = ResumeScore.objects.filter(
-            opportunity=opportunity,
-            overall_score__gt=0
-        ).select_related('resume', 'resume__user').order_by('-overall_score')[:10]
+    volunteer_score = None
+    volunteer_application = None
+    is_scanning_resumes = False
+
+    if request.user.is_authenticated:
+        from resumes.models import Resume, ResumeScore
+
+        if request.user == opportunity.organization:
+            # Organization viewing their own opportunity - show top candidates
+            top_candidates = ResumeScore.objects.filter(
+                opportunity=opportunity,
+                overall_score__gt=0
+            ).select_related('resume', 'resume__user').order_by('-overall_score')[:10]
+
+            # If no candidates yet, show scanning message
+            if not top_candidates:
+                is_scanning_resumes = True
+
+            # Attach application status to each candidate
+            for candidate in top_candidates:
+                candidate.application = Application.objects.filter(
+                    opportunity=opportunity,
+                    volunteer=candidate.resume.user
+                ).first()
+
+        elif request.user.user_type == 'volunteer':
+            # Volunteer viewing opportunity - show their match score if available
+            resume = Resume.objects.filter(user=request.user).first()
+            if resume:
+                volunteer_score = ResumeScore.objects.filter(
+                    resume=resume,
+                    opportunity=opportunity
+                ).first()
+
+            # Check if volunteer has already applied
+            volunteer_application = Application.objects.filter(
+                opportunity=opportunity,
+                volunteer=request.user
+            ).first()
 
     return render(request, 'opportunities/detail.html', {
         'opportunity': opportunity,
         'top_candidates': top_candidates,
+        'volunteer_score': volunteer_score,
+        'volunteer_application': volunteer_application,
+        'is_scanning_resumes': is_scanning_resumes,
     })
 
 
@@ -117,38 +182,67 @@ def update_candidate_status(request, pk, score_id, status):
 @login_required
 def apply_to_opportunity(request, pk):
     opportunity = get_object_or_404(Opportunity, id=pk)
-    
+
     # Check if already applied
     existing_application = Application.objects.filter(
         opportunity=opportunity,
         volunteer=request.user
     ).first()
-    
-    if existing_application:
+
+    # Block if application is pending or accepted
+    if existing_application and existing_application.status in ['pending', 'accepted']:
         messages.warning(request, "You have already applied to this opportunity.")
         return redirect('opportunities:detail', pk=pk)
-    
+
     if request.method == 'POST':
         message = request.POST.get('message', '')
-        application = Application.objects.create(
-            opportunity=opportunity,
-            volunteer=request.user,
-            message=message
-        )
-        messages.success(request, "Your application has been submitted!")
-        
-        # TODO: Send notification email to organization
-        # from notifications.utils import send_application_notification
-        # send_application_notification(application)
-        
+
+        # If withdrawn or rejected, reactivate the existing application
+        if existing_application:
+            existing_application.status = 'pending'
+            existing_application.message = message
+            existing_application.save()
+            application = existing_application
+        else:
+            application = Application.objects.create(
+                opportunity=opportunity,
+                volunteer=request.user,
+                message=message
+            )
+        messages.success(request, "Your application has been submitted successfully!")
+
+        # Send notification email to organization
+        org_email = opportunity.organization.email
+        org_name = opportunity.organization.organization_profile.organization_name if hasattr(opportunity.organization, 'organization_profile') else opportunity.organization.username
+        volunteer_name = request.user.get_full_name() or request.user.username
+
+        if org_email:
+            subject = f"New Application for {opportunity.title}"
+            email_message = f"""Hello {org_name},
+
+You have received a new volunteer application!
+
+Opportunity: {opportunity.title}
+Applicant: {volunteer_name}
+Email: {request.user.email}
+
+"""
+            if message:
+                email_message += f"""Message from applicant:
+{message}
+
+"""
+
+            email_message += f"""Log in to your dashboard to review this application.
+
+Best regards,
+Volunteer Finder"""
+
+            send_email(subject, email_message, [org_email])
+
         return redirect('opportunities:detail', pk=pk)
     
     return render(request, 'opportunities/apply.html', {'opportunity': opportunity})
-
-@login_required
-def my_applications(request):
-    applications = Application.objects.filter(volunteer=request.user)
-    return render(request, 'opportunities/my_applications.html', {'applications': applications})
 
 @login_required
 def withdraw_application(request, application_id):
@@ -156,4 +250,158 @@ def withdraw_application(request, application_id):
     application.status = 'withdrawn'
     application.save()
     messages.success(request, "Application withdrawn successfully.")
-    return redirect('my_applications')
+    return redirect('volunteer_dashboard')
+
+
+@login_required
+def invite_volunteer(request, pk, volunteer_id):
+    """
+    Send an invitation email to a volunteer asking them to apply for an opportunity.
+    Only the organization that owns the opportunity can send invitations.
+    """
+    from accounts.models import User
+
+    opportunity = get_object_or_404(Opportunity, pk=pk)
+    volunteer = get_object_or_404(User, id=volunteer_id, user_type='volunteer')
+
+    # Check if user owns this opportunity
+    if request.user != opportunity.organization:
+        messages.error(request, 'You do not have permission to invite volunteers.')
+        return redirect('opportunities:detail', pk=pk)
+
+    # Check if volunteer has already applied
+    existing_application = Application.objects.filter(
+        opportunity=opportunity,
+        volunteer=volunteer
+    ).first()
+
+    if existing_application and existing_application.status in ['pending', 'accepted']:
+        messages.warning(request, f'{volunteer.username} has already applied to this opportunity.')
+        return redirect('opportunities:detail', pk=pk)
+
+    # Send invitation email
+    org_name = opportunity.organization.organization_profile.organization_name if hasattr(opportunity.organization, 'organization_profile') else opportunity.organization.username
+    volunteer_email = volunteer.email
+
+    if volunteer_email:
+        subject = f"You're Invited to Apply: {opportunity.title}"
+        email_message = f"""Hello {volunteer.get_full_name() or volunteer.username},
+
+{org_name} thinks you'd be a great fit for their volunteer opportunity!
+
+Opportunity: {opportunity.title}
+Location: {opportunity.location}
+Hours: {opportunity.hours_required} hours
+
+Description:
+{opportunity.description[:500]}{'...' if len(opportunity.description) > 500 else ''}
+
+We encourage you to log in and apply for this opportunity.
+
+Best regards,
+Volunteer Finder"""
+
+        if send_email(subject, email_message, [volunteer_email]):
+            messages.success(request, f'Invitation sent to {volunteer.username}!')
+        else:
+            messages.error(request, 'Failed to send invitation email. Please try again.')
+    else:
+        messages.error(request, f'{volunteer.username} does not have an email address on file.')
+
+    return redirect('opportunities:detail', pk=pk)
+
+
+@login_required
+def review_application(request, application_id):
+    """
+    View for organizations to review a volunteer application.
+    Shows application details and allows accept/reject with feedback.
+    """
+    application = get_object_or_404(Application, id=application_id)
+
+    # Check if user is the organization that owns this opportunity
+    if request.user != application.opportunity.organization:
+        messages.error(request, 'You do not have permission to review this application.')
+        return redirect('organization_dashboard')
+
+    # Get volunteer's resume and score if available
+    volunteer_resume = None
+    resume_score = None
+    try:
+        from resumes.models import Resume, ResumeScore
+        volunteer_resume = Resume.objects.filter(user=application.volunteer).first()
+        if volunteer_resume:
+            resume_score = ResumeScore.objects.filter(
+                resume=volunteer_resume,
+                opportunity=application.opportunity
+            ).first()
+    except:
+        pass
+
+    # Get volunteer profile if available
+    volunteer_profile = None
+    try:
+        volunteer_profile = application.volunteer.volunteer_profile
+    except:
+        pass
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        feedback = request.POST.get('feedback', '')
+
+        if action == 'accept':
+            application.status = 'accepted'
+            application.save()
+            messages.success(request, f'Application from {application.volunteer.username} has been accepted!')
+
+            # Send acceptance email to volunteer
+            subject = f'Application Accepted: {application.opportunity.title}'
+            email_message = f"""Congratulations!
+
+Your application for "{application.opportunity.title}" has been accepted!
+
+"""
+            if feedback:
+                email_message += f"""Message from the organization:
+{feedback}
+
+"""
+            email_message += """Please log in to your dashboard for next steps.
+
+Best regards,
+Volunteer Finder"""
+
+            send_email(subject, email_message, [application.volunteer.email])
+
+        elif action == 'reject':
+            application.status = 'rejected'
+            application.save()
+            messages.success(request, f'Application from {application.volunteer.username} has been declined.')
+
+            # Send rejection email to volunteer
+            subject = f'Application Update: {application.opportunity.title}'
+            email_message = f"""Thank you for your interest in "{application.opportunity.title}".
+
+Unfortunately, we are unable to accept your application at this time.
+
+"""
+            if feedback:
+                email_message += f"""Feedback from the organization:
+{feedback}
+
+"""
+            email_message += """We encourage you to apply for other opportunities that match your skills.
+
+Best regards,
+Volunteer Finder"""
+
+            send_email(subject, email_message, [application.volunteer.email])
+
+        return redirect('opportunities:review_application', application_id=application.id)
+
+    return render(request, 'opportunities/review_application.html', {
+        'application': application,
+        'volunteer_resume': volunteer_resume,
+        'resume_score': resume_score,
+        'volunteer_profile': volunteer_profile,
+    })

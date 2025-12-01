@@ -35,6 +35,46 @@ class Opportunity(models.Model):
     def __str__(self):
         return f"{self.title} - {self.organization.username}"
 
+    @property
+    def accepted_applications_count(self):
+        """Count of accepted applications for this opportunity."""
+        return self.applications.filter(status='accepted').count()
+
+    @property
+    def active_applications_count(self):
+        """Count of active applications (pending or accepted, excluding withdrawn/rejected)."""
+        return self.applications.filter(status__in=['pending', 'accepted']).count()
+
+    @property
+    def is_filled(self):
+        """Check if all spots have been filled."""
+        return self.accepted_applications_count >= self.spots_available
+
+    def check_and_update_status(self):
+        """
+        Check if the opportunity should be automatically closed.
+        Sets status to 'filled' if all positions are filled.
+        Returns True if status was changed, False otherwise.
+        """
+        from django.utils import timezone
+
+        if self.status != 'active':
+            return False
+
+        # Check if all spots are filled
+        if self.is_filled:
+            self.status = 'filled'
+            self.save(update_fields=['status', 'updated_at'])
+            return True
+
+        # Check if end date has passed
+        if self.end_date and self.end_date < timezone.now().date():
+            self.status = 'expired'
+            self.save(update_fields=['status', 'updated_at'])
+            return True
+
+        return False
+
 
 class Application(models.Model):
     """

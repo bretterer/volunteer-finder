@@ -370,7 +370,7 @@
                   </span>
                 </td>
                 <td>
-                  <a href="#" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Review</a>
+                  <a href="{% url 'opportunities:review_application' application.id %}" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Review</a>
                 </td>
               </tr>
               {% endfor %}
@@ -411,9 +411,9 @@
           <p style="color: #4a5568; margin-bottom: 1rem;">{{ opportunity.description|truncatewords:30 }}</p>
           <div style="display: flex; gap: 1rem;">
             <a href="{% url 'opportunities:detail' opportunity.pk %}" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">View Details</a>
-            <a href="#" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Edit</a>
+            <a href="{% url 'opportunities:edit' pk=opportunity.pk %}" class="btn-secondary btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Edit</a>
             <span style="color: #718096; align-self: center; margin-left: auto;">
-              {{ opportunity.applications.count }} application{{ opportunity.applications.count|pluralize }}
+              {{ opportunity.active_applications_count }} application{{ opportunity.active_applications_count|pluralize }}
             </span>
           </div>
         </div>

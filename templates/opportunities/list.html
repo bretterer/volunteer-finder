@@ -51,6 +51,68 @@
 
     .header-nav a:hover { opacity: 0.8; }
 
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .dropdown-toggle::after {
+      content: '▼';
+      font-size: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 180px;
+      padding: 0.5rem 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #2d3748 !important;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f7fafc;
+      opacity: 1 !important;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.5rem 0;
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -357,7 +419,15 @@
         {% if user.is_authenticated %}
           {% if user.user_type == 'volunteer' %}
             <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
-            <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+            <div class="dropdown">
+              <span class="dropdown-toggle">Profile</span>
+              <div class="dropdown-menu">
+                <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+                <a href="{% url 'resumes:upload' %}">Upload Resume</a>
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+              </div>
+            </div>
           {% elif user.user_type == 'organization' %}
             <a href="{% url 'organization_dashboard' %}">Dashboard</a>
             <a href="{% url 'opportunities:create' %}">Post Opportunity</a>

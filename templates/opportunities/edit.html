@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Edit Opportunity - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-intro {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .page-intro h2 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .page-intro p {
+      color: #718096;
+    }
+
+    .form-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .required {
+      color: #e53e3e;
+      margin-left: 0.25rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 0.85rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      background: #f7fafc;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .help-text {
+      font-size: 0.875rem;
+      color: #718096;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .error {
+      color: #e53e3e;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .btn {
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-section {
+      background: #f0f4f8;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-section label {
+      margin-top: 0;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+
+    .status-active { background: #c6f6d5; color: #276749; }
+    .status-filled { background: #bee3f8; color: #2c5282; }
+    .status-expired { background: #fed7d7; color: #c53030; }
+    .status-cancelled { background: #e2e8f0; color: #4a5568; }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Edit Opportunity</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'organization_dashboard' %}">Dashboard</a>
+        <a href="{% url 'opportunities:detail' pk=opportunity.pk %}">View Opportunity</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-intro">
+      <h2>Edit: {{ opportunity.title }}</h2>
+      <p>Update the details of your volunteer opportunity below.</p>
+    </div>
+
+    <div class="form-card">
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="{{ form.title.id_for_label }}">
+            Opportunity Title <span class="required">*</span>
+          </label>
+          {{ form.title }}
+          {% if form.title.errors %}
+            {% for error in form.title.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.description.id_for_label }}">
+            Description <span class="required">*</span>
+          </label>
+          {{ form.description }}
+          {% if form.description.errors %}
+            {% for error in form.description.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          <span class="help-text">Describe the volunteer role, responsibilities, and what volunteers will be doing.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.location.id_for_label }}">
+            Location <span class="required">*</span>
+          </label>
+          {{ form.location }}
+          {% if form.location.errors %}
+            {% for error in form.location.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.start_date.id_for_label }}">
+              Start Date <span class="required">*</span>
+            </label>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+              {% for error in form.start_date.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.end_date.id_for_label }}">
+              End Date
+            </label>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+              {% for error in form.end_date.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+            <span class="help-text">Optional - leave blank for one-day events</span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="{{ form.hours_required.id_for_label }}">
+              Hours Required <span class="required">*</span>
+            </label>
+            {{ form.hours_required }}
+            {% if form.hours_required.errors %}
+              {% for error in form.hours_required.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="form-group">
+            <label for="{{ form.spots_available.id_for_label }}">
+              Spots Available <span class="required">*</span>
+            </label>
+            {{ form.spots_available }}
+            {% if form.spots_available.errors %}
+              {% for error in form.spots_available.errors %}
+                <span class="error">{{ error }}</span>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="{{ form.skills_input.id_for_label }}">
+            Required Skills
+          </label>
+          {{ form.skills_input }}
+          {% if form.skills_input.errors %}
+            {% for error in form.skills_input.errors %}
+              <span class="error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+          <span class="help-text">{{ form.skills_input.help_text }}</span>
+        </div>
+
+        <div class="form-actions">
+          <a href="{% url 'opportunities:detail' pk=opportunity.pk %}" class="btn btn-secondary">Cancel</a>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
