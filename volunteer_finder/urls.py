@@ -21,7 +21,8 @@ from django.conf.urls.static import static
 from core.views import (
     home, volunteer_dashboard, organization_dashboard, admin_dashboard,
     admin_reports, volunteer_activity_report, opportunity_report, organization_report,
-    export_volunteer_report_csv, export_opportunity_report_csv, export_organization_report_csv
+    export_volunteer_report_csv, export_opportunity_report_csv, export_organization_report_csv,
+    send_test_email
 )
 
 urlpatterns = [
@@ -31,6 +32,7 @@ urlpatterns = [
     path('dashboard/volunteer/', volunteer_dashboard, name='volunteer_dashboard'),
     path('dashboard/organization/', organization_dashboard, name='organization_dashboard'),
     path('dashboard/admin/', admin_dashboard, name='admin_dashboard'),
+    path('dashboard/admin/test-email/', send_test_email, name='send_test_email'),
     # Admin Reports
     path('dashboard/admin/reports/', admin_reports, name='admin_reports'),
     path('dashboard/admin/reports/volunteers/', volunteer_activity_report, name='volunteer_activity_report'),

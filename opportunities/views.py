@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
 from .models import Opportunity, Application
 from .forms import OpportunityForm
+from core.email import send_email
 
 
 @login_required
@@ -233,18 +232,7 @@ Email: {request.user.email}
 Best regards,
 Volunteer Finder"""
 
-            try:
-                send_mail(
-                    subject=subject,
-                    message=email_message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[org_email],
-                    fail_silently=False,
-                )
-            except Exception as e:
-                import logging
-                logger = logging.getLogger(__name__)
-                logger.error(f"Failed to send application notification email: {e}")
+            send_email(subject, email_message, [org_email])
 
         return redirect('opportunities:detail', pk=pk)
     
@@ -307,19 +295,9 @@ We encourage you to log in and apply for this opportunity.
 Best regards,
 Volunteer Finder"""
 
-        try:
-            send_mail(
-                subject=subject,
-                message=email_message,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[volunteer_email],
-                fail_silently=False,
-            )
+        if send_email(subject, email_message, [volunteer_email]):
             messages.success(request, f'Invitation sent to {volunteer.username}!')
-        except Exception as e:
-            import logging
-            logger = logging.getLogger(__name__)
-            logger.error(f"Failed to send invitation email: {e}")
+        else:
             messages.error(request, 'Failed to send invitation email. Please try again.')
     else:
         messages.error(request, f'{volunteer.username} does not have an email address on file.')
@@ -371,32 +349,23 @@ def review_application(request, application_id):
             messages.success(request, f'Application from {application.volunteer.username} has been accepted!')
 
             # Send acceptance email to volunteer
-            try:
-                subject = f'Application Accepted: {application.opportunity.title}'
-                email_message = f"""Congratulations!
+            subject = f'Application Accepted: {application.opportunity.title}'
+            email_message = f"""Congratulations!
 
 Your application for "{application.opportunity.title}" has been accepted!
 
 """
-                if feedback:
-                    email_message += f"""Message from the organization:
+            if feedback:
+                email_message += f"""Message from the organization:
 {feedback}
 
 """
-                email_message += """Please log in to your dashboard for next steps.
+            email_message += """Please log in to your dashboard for next steps.
 
 Best regards,
 Volunteer Finder"""
 
-                send_mail(
-                    subject=subject,
-                    message=email_message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[application.volunteer.email],
-                    fail_silently=True,
-                )
-            except:
-                pass
+            send_email(subject, email_message, [application.volunteer.email])
 
         elif action == 'reject':
             application.status = 'rejected'
@@ -404,32 +373,23 @@ Volunteer Finder"""
             messages.success(request, f'Application from {application.volunteer.username} has been declined.')
 
             # Send rejection email to volunteer
-            try:
-                subject = f'Application Update: {application.opportunity.title}'
-                email_message = f"""Thank you for your interest in "{application.opportunity.title}".
+            subject = f'Application Update: {application.opportunity.title}'
+            email_message = f"""Thank you for your interest in "{application.opportunity.title}".
 
 Unfortunately, we are unable to accept your application at this time.
 
 """
-                if feedback:
-                    email_message += f"""Feedback from the organization:
+            if feedback:
+                email_message += f"""Feedback from the organization:
 {feedback}
 
 """
-                email_message += """We encourage you to apply for other opportunities that match your skills.
+            email_message += """We encourage you to apply for other opportunities that match your skills.
 
 Best regards,
 Volunteer Finder"""
 
-                send_mail(
-                    subject=subject,
-                    message=email_message,
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[application.volunteer.email],
-                    fail_silently=True,
-                )
-            except:
-                pass
+            send_email(subject, email_message, [application.volunteer.email])
 
         return redirect('opportunities:review_application', application_id=application.id)
 
