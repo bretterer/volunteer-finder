@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Reports - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .welcome {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .welcome h2 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .welcome p {
+      color: #718096;
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .report-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #667eea;
+      transition: all 0.2s;
+    }
+
+    .report-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .report-card h3 {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+    }
+
+    .report-card p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .report-card .metrics {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .report-card .metric {
+      background: #f7fafc;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #4a5568;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .reports-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Admin Reports</h1>
+      <nav class="header-nav">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a href="{% url 'home' %}">Home</a>
+        <a href="/admin/">Django Admin</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="welcome">
+      <h2>Reports Dashboard</h2>
+      <p>Generate and export reports to track volunteer and opportunity activity across the platform.</p>
+    </div>
+
+    <div class="reports-grid">
+      <div class="report-card">
+        <h3>Volunteer Activity Report</h3>
+        <p>Track volunteer registrations, application activity, acceptance rates, and engagement trends over time.</p>
+        <div class="metrics">
+          <span class="metric">Registrations</span>
+          <span class="metric">Applications</span>
+          <span class="metric">Acceptance Rate</span>
+        </div>
+        <a href="{% url 'volunteer_activity_report' %}" class="btn">View Report</a>
+      </div>
+
+      <div class="report-card">
+        <h3>Opportunity Report</h3>
+        <p>Analyze opportunity creation trends, fill rates, popular locations, and application statistics per opportunity.</p>
+        <div class="metrics">
+          <span class="metric">Creation Trends</span>
+          <span class="metric">Fill Rate</span>
+          <span class="metric">Locations</span>
+        </div>
+        <a href="{% url 'opportunity_report' %}" class="btn">View Report</a>
+      </div>
+
+      <div class="report-card">
+        <h3>Organization Report</h3>
+        <p>Review organization registrations, verification status, and activity levels including opportunities posted.</p>
+        <div class="metrics">
+          <span class="metric">Registrations</span>
+          <span class="metric">Verified Status</span>
+          <span class="metric">Activity Level</span>
+        </div>
+        <a href="{% url 'organization_report' %}" class="btn">View Report</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

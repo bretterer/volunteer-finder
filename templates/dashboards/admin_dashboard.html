@@ -245,6 +245,7 @@
       <h1>Admin Dashboard</h1>
       <nav class="header-nav">
         <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'admin_reports' %}">Reports</a>
         <a href="/admin/">Django Admin</a>
         <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
         <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
@@ -362,11 +363,32 @@
       </div>
 
       <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'admin_reports' %}" class="btn">View Reports</a>
         <a href="/admin/accounts/user/" class="btn">Manage Users</a>
         <a href="/admin/opportunities/opportunity/" class="btn">Manage Opportunities</a>
         <a href="/admin/opportunities/application/" class="btn">Manage Applications</a>
         <a href="{% url 'opportunities:list' %}" class="btn">View All Opportunities</a>
       </div>
+    </section>
+
+    <section class="section" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 2rem;">
+      <h2 style="margin-bottom: 1rem;">Test Email</h2>
+      <p style="color: #718096; margin-bottom: 1rem;">Send a test email to verify your email configuration is working.</p>
+      {% if messages %}
+        {% for message in messages %}
+          <div style="padding: 0.75rem 1rem; margin-bottom: 1rem; border-radius: 8px; {% if message.tags == 'success' %}background: #d1fae5; color: #065f46;{% else %}background: #fee2e2; color: #991b1b;{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+      <form method="post" action="{% url 'send_test_email' %}" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+        {% csrf_token %}
+        <div style="flex: 1; min-width: 250px;">
+          <label for="email" style="display: block; color: #4a5568; font-weight: 500; margin-bottom: 0.5rem;">Email Address</label>
+          <input type="email" name="email" id="email" required placeholder="test@example.com" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 1rem;">
+        </div>
+        <button type="submit" class="btn">Send Test Email</button>
+      </form>
     </section>
 
     <section class="section" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Volunteer Activity Report - Volunteer Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .report-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .report-header h2 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .report-header p {
+      color: #718096;
+    }
+
+    .filter-form {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-form select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #667eea;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section h3 {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-accepted {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-rejected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .status-withdrawn {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .export-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .report-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Activity Report</h1>
+      <nav class="header-nav">
+        <a href="{% url 'admin_reports' %}">All Reports</a>
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="report-header">
+      <div>
+        <h2>Volunteer Activity Report</h2>
+        <p>Tracking volunteer registrations and application activity</p>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <form class="filter-form" method="get">
+          <select name="days" onchange="this.form.submit()">
+            <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
+            <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+            <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+            <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
+          </select>
+        </form>
+        <div class="export-buttons">
+          <a href="{% url 'export_volunteer_report_csv' %}?days={{ days }}" class="btn btn-secondary">Export CSV</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{{ total_volunteers }}</div>
+        <div class="stat-label">Total Volunteers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ new_volunteers }}</div>
+        <div class="stat-label">New Volunteers ({{ days }} days)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ total_applications }}</div>
+        <div class="stat-label">Applications ({{ days }} days)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ acceptance_rate }}%</div>
+        <div class="stat-label">Acceptance Rate</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="section">
+        <h3>Application Status Distribution</h3>
+        <div class="chart-container">
+          <canvas id="statusChart"></canvas>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Application Trend</h3>
+        <div class="chart-container">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Most Active Volunteers</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Applications</th>
+              <th>Joined Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for volunteer in active_volunteers %}
+            <tr>
+              <td><strong>{{ forloop.counter }}</strong></td>
+              <td>{{ volunteer.username }}</td>
+              <td>{{ volunteer.email }}</td>
+              <td>{{ volunteer.application_count }}</td>
+              <td>{{ volunteer.date_joined|date:"M d, Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" style="text-align: center; color: #718096;">No volunteer activity in this period</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Application Status Distribution Chart
+    const statusData = {{ applications_by_status|safe }};
+    const statusLabels = statusData.map(item => item.status.charAt(0).toUpperCase() + item.status.slice(1));
+    const statusValues = statusData.map(item => item.count);
+    const statusColors = {
+      'Pending': '#fef3c7',
+      'Accepted': '#d1fae5',
+      'Rejected': '#fee2e2',
+      'Withdrawn': '#e2e8f0'
+    };
+    const statusBorderColors = {
+      'Pending': '#92400e',
+      'Accepted': '#065f46',
+      'Rejected': '#991b1b',
+      'Withdrawn': '#4a5568'
+    };
+
+    new Chart(document.getElementById('statusChart'), {
+      type: 'doughnut',
+      data: {
+        labels: statusLabels,
+        datasets: [{
+          data: statusValues,
+          backgroundColor: statusLabels.map(label => statusColors[label] || '#e2e8f0'),
+          borderColor: statusLabels.map(label => statusBorderColors[label] || '#4a5568'),
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Application Trend Chart
+    const trendData = {{ application_trend|safe }};
+    const trendLabels = trendData.map(item => {
+      const date = new Date(item.week);
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+    const trendValues = trendData.map(item => item.count);
+
+    new Chart(document.getElementById('trendChart'), {
+      type: 'line',
+      data: {
+        labels: trendLabels,
+        datasets: [{
+          label: 'Applications',
+          data: trendValues,
+          borderColor: '#667eea',
+          backgroundColor: 'rgba(102, 126, 234, 0.1)',
+          fill: true,
+          tension: 0.4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

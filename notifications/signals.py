@@ -1,9 +1,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.mail import send_mail
 
 from opportunities.models import Opportunity
 from notifications.models import Notification
+from core.email import send_email
 
 
 @receiver(post_save, sender=Opportunity)
@@ -24,13 +24,7 @@ def notify_org_on_opportunity_creation(sender, instance, created, **kwargs):
         f"Thank you for using Volunteer Finder!"
     )
 
-    send_mail(
-        subject,
-        message,
-        None,            # uses DEFAULT_FROM_EMAIL
-        [org_email],
-        fail_silently=False,
-    )
+    send_email(subject, message, [org_email])
 
     # --- 2) OPTIONAL: Create an in-app notification for the org user ---
     Notification.objects.create(
