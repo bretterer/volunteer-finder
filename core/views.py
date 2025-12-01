@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib import messages
 from django.http import HttpResponse
 from django.db.models import Count, Avg, Q
 from django.db.models.functions import TruncMonth, TruncWeek
@@ -10,6 +11,7 @@ import json
 
 from opportunities.models import Opportunity, Application
 from accounts.models import User, VolunteerProfile, OrganizationProfile
+from core.email import send_email
 
 
 def is_admin(user):
@@ -407,3 +409,30 @@ def export_organization_report_csv(request):
         ])
 
     return response
+
+
+@login_required
+@user_passes_test(is_admin)
+def send_test_email(request):
+    """Send a test email with lorem ipsum content."""
+    if request.method == 'POST':
+        recipient = request.POST.get('email', '').strip()
+        if not recipient:
+            messages.error(request, 'Please enter an email address.')
+            return redirect('admin_dashboard')
+
+        subject = 'Test Email from Volunteer Finder'
+        body = """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."""
+
+        if send_email(subject, body, [recipient]):
+            messages.success(request, f'Test email sent successfully to {recipient}!')
+        else:
+            messages.error(request, f'Failed to send test email to {recipient}.')
+
+        return redirect('admin_dashboard')
+
+    return redirect('admin_dashboard')
