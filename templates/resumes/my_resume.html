@@ -1,119 +1,713 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Resume - Volunteer Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-{% block title %}My Resume - Volunteer Finder{% endblock %}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
 
-{% block content %}
-<div class="container py-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2><i class="fas fa-file-alt me-2"></i>My Resume</h2>
-                <a href="{% url 'resumes:upload' %}" class="btn btn-primary">
-                    <i class="fas fa-upload me-2"></i>{% if resume %}Update{% else %}Upload{% endif %} Resume
-                </a>
-            </div>
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
 
-            {% if resume %}
-                <!-- Resume Info -->
-                <div class="card mb-4">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Resume Uploaded</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>File:</strong> {{ resume.original_filename }}</p>
-                                <p><strong>Uploaded:</strong> {{ resume.uploaded_at|date:"M d, Y H:i" }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>Size:</strong> {{ resume.file_size|filesizeformat }}</p>
-                                <p><strong>Matched Against:</strong> {{ scores|length }} opportunities</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    .header h1 { font-size: 1.8rem; font-weight: 600; }
 
-                <!-- Top Matches -->
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>Your Top Opportunity Matches</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if scores %}
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>Rank</th>
-                                            <th>Opportunity</th>
-                                            <th>Match Score</th>
-                                            <th>Skills Match</th>
-                                            <th>Experience Match</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for score in scores %}
-                                            <tr>
-                                                <td>
-                                                    <span class="badge {% if forloop.counter <= 3 %}bg-success{% elif forloop.counter <= 10 %}bg-primary{% else %}bg-secondary{% endif %}">
-                                                        #{{ forloop.counter }}
-                                                    </span>
-                                                </td>
-                                                <td>
-                                                    <strong>{{ score.opportunity.title }}</strong>
-                                                    <br>
-                                                    <small class="text-muted">{{ score.opportunity.location }}</small>
-                                                </td>
-                                                <td>
-                                                    <span class="badge {% if score.overall_score >= 80 %}bg-success{% elif score.overall_score >= 60 %}bg-warning{% else %}bg-secondary{% endif %} fs-6">
-                                                        {{ score.overall_score }}/100
-                                                    </span>
-                                                </td>
-                                                <td>{{ score.skills_score }}/100</td>
-                                                <td>{{ score.experience_score }}/100</td>
-                                                <td>
-                                                    <a href="{% url 'opportunities:detail' score.opportunity.pk %}" class="btn btn-sm btn-outline-primary">
-                                                        View & Apply
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-info mb-0">
-                                <i class="fas fa-spinner fa-spin me-2"></i>
-                                Your resume is being analyzed. Refresh the page in a few minutes to see your matches!
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
 
-            {% else %}
-                <!-- No Resume -->
-                <div class="card">
-                    <div class="card-body text-center py-5">
-                        <i class="fas fa-file-upload fa-4x text-muted mb-4"></i>
-                        <h4>No Resume Uploaded</h4>
-                        <p class="text-muted">Upload your resume to get matched with volunteer opportunities!</p>
-                        <a href="{% url 'resumes:upload' %}" class="btn btn-primary btn-lg">
-                            <i class="fas fa-upload me-2"></i>Upload Resume
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover { opacity: 0.8; }
+
+    /* Dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .dropdown-toggle::after {
+      content: '▼';
+      font-size: 0.6rem;
+      margin-left: 0.25rem;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 180px;
+      padding: 0.5rem 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-top: 0.5rem;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      color: #2d3748 !important;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+      background: #f7fafc;
+      opacity: 1 !important;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.5rem 0;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #764ba2;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .page-title {
+      font-size: 1.8rem;
+      color: #2d3748;
+    }
+
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background: #d1fae5;
+      color: #065f46;
+      border-left: 3px solid #10b981;
+    }
+
+    .alert-warning {
+      background: #fef3c7;
+      color: #92400e;
+      border-left: 3px solid #f59e0b;
+    }
+
+    .alert-error {
+      background: #fee2e2;
+      color: #991b1b;
+      border-left: 3px solid #ef4444;
+    }
+
+    .alert-info {
+      background: #dbeafe;
+      color: #1e40af;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      transform: translateY(-2px);
+    }
+
+    /* Resume Info Card */
+    .resume-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+
+    .resume-header {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .resume-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .resume-body {
+      padding: 1.5rem;
+    }
+
+    .resume-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem;
+      background: #f7fafc;
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .resume-file {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: #f7fafc;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .resume-file-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .resume-file-info {
+      flex: 1;
+    }
+
+    .resume-file-name {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .resume-file-meta {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .resume-file-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* Matches Section */
+    .matches-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      overflow: hidden;
+    }
+
+    .matches-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .matches-header h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .matches-body {
+      padding: 0;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+      font-size: 0.9rem;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .rank-top {
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      color: white;
+    }
+
+    .rank-high {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .rank-normal {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .opportunity-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .opportunity-title {
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .opportunity-location {
+      font-size: 0.85rem;
+      color: #718096;
+    }
+
+    .score-badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .score-high {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .score-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .score-low {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .sub-score {
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      color: #718096;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Analyzing State */
+    .analyzing-state {
+      background: #dbeafe;
+      border-radius: 8px;
+      padding: 2rem;
+      text-align: center;
+      margin: 1.5rem;
+    }
+
+    .analyzing-state .spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid #3b82f6;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .analyzing-state h3 {
+      color: #1e40af;
+      margin-bottom: 0.5rem;
+    }
+
+    .analyzing-state p {
+      color: #3b82f6;
+      font-size: 0.9rem;
+    }
+
+    /* No Resume State */
+    .no-resume-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .no-resume-icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      opacity: 0.5;
+    }
+
+    .no-resume-card h3 {
+      font-size: 1.5rem;
+      color: #2d3748;
+      margin-bottom: 0.75rem;
+    }
+
+    .no-resume-card p {
+      color: #718096;
+      margin-bottom: 2rem;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .resume-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .resume-file {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .resume-file-actions {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Volunteer Finder</h1>
+      <nav class="header-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'opportunities:list' %}">Opportunities</a>
+        <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+        <div class="dropdown">
+          <span class="dropdown-toggle">Profile</span>
+          <div class="dropdown-menu">
+            <a href="{% url 'resumes:my_resume' %}">My Resume</a>
+            <a href="{% url 'resumes:upload' %}">Upload Resume</a>
+            <div class="dropdown-divider"></div>
+            <a href="{% url 'volunteer_dashboard' %}">Dashboard</a>
+          </div>
         </div>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
     </div>
-</div>
-{% endblock %}
+  </header>
+
+  <main class="container">
+    <a href="{% url 'volunteer_dashboard' %}" class="back-link">
+      ← Back to Dashboard
+    </a>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="page-header">
+      <h1 class="page-title">My Resume</h1>
+      <a href="{% url 'resumes:upload' %}" class="btn btn-primary">
+        {% if resume %}Update Resume{% else %}Upload Resume{% endif %}
+      </a>
+    </div>
+
+    {% if resume %}
+      <!-- Resume Info Card -->
+      <div class="resume-card">
+        <div class="resume-header">
+          <span style="font-size: 1.25rem;">✓</span>
+          <h2>Resume Uploaded</h2>
+        </div>
+        <div class="resume-body">
+          <div class="resume-stats">
+            <div class="stat-item">
+              <div class="stat-value">{{ scores|length }}</div>
+              <div class="stat-label">Opportunities Matched</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ resume.file_size|filesizeformat }}</div>
+              <div class="stat-label">File Size</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value">{{ resume.uploaded_at|date:"M d" }}</div>
+              <div class="stat-label">Uploaded</div>
+            </div>
+          </div>
+
+          <div class="resume-file">
+            <div class="resume-file-icon">📄</div>
+            <div class="resume-file-info">
+              <div class="resume-file-name">{{ resume.original_filename }}</div>
+              <div class="resume-file-meta">Uploaded {{ resume.uploaded_at|date:"M d, Y" }} at {{ resume.uploaded_at|time:"H:i" }}</div>
+            </div>
+            <div class="resume-file-actions">
+              <a href="{{ resume.file.url }}" target="_blank" class="btn btn-secondary btn-sm">
+                Download
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Matches -->
+      <div class="matches-card">
+        <div class="matches-header">
+          <h2>Your Top Opportunity Matches</h2>
+        </div>
+        <div class="matches-body">
+          {% if scores %}
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Rank</th>
+                    <th>Opportunity</th>
+                    <th>Match Score</th>
+                    <th>Skills</th>
+                    <th>Experience</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for score in scores %}
+                    <tr>
+                      <td>
+                        <span class="rank-badge {% if forloop.counter <= 3 %}rank-top{% elif forloop.counter <= 10 %}rank-high{% else %}rank-normal{% endif %}">
+                          {{ forloop.counter }}
+                        </span>
+                      </td>
+                      <td>
+                        <div class="opportunity-info">
+                          <span class="opportunity-title">{{ score.opportunity.title }}</span>
+                          <span class="opportunity-location">📍 {{ score.opportunity.location }}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="score-badge {% if score.overall_score >= 80 %}score-high{% elif score.overall_score >= 60 %}score-medium{% else %}score-low{% endif %}">
+                          {{ score.overall_score }}/100
+                        </span>
+                      </td>
+                      <td class="sub-score">{{ score.skills_score }}/100</td>
+                      <td class="sub-score">{{ score.experience_score }}/100</td>
+                      <td>
+                        <a href="{% url 'opportunities:detail' score.opportunity.pk %}" class="btn btn-primary btn-sm">
+                          View & Apply
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="analyzing-state">
+              <div class="spinner"></div>
+              <h3>Analyzing Your Resume</h3>
+              <p>Our AI is matching your skills and experience with available opportunities.<br>Refresh the page in a few minutes to see your matches!</p>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+    {% else %}
+      <!-- No Resume State -->
+      <div class="no-resume-card">
+        <div class="no-resume-icon">📄</div>
+        <h3>No Resume Uploaded</h3>
+        <p>Upload your resume to get matched with volunteer opportunities that fit your skills and experience!</p>
+        <a href="{% url 'resumes:upload' %}" class="btn btn-primary">
+          Upload Resume
+        </a>
+      </div>
+    {% endif %}
+  </main>
+</body>
+</html>
