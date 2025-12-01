@@ -245,6 +245,7 @@
       <h1>Admin Dashboard</h1>
       <nav class="header-nav">
         <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'admin_reports' %}">Reports</a>
         <a href="/admin/">Django Admin</a>
         <a href="{% url 'opportunities:list' %}">Browse Opportunities</a>
         <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
@@ -362,6 +363,7 @@
       </div>
 
       <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="{% url 'admin_reports' %}" class="btn">View Reports</a>
         <a href="/admin/accounts/user/" class="btn">Manage Users</a>
         <a href="/admin/opportunities/opportunity/" class="btn">Manage Opportunities</a>
         <a href="/admin/opportunities/application/" class="btn">Manage Applications</a>

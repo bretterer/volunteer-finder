@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Organization Report - Volunteer Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f7fafc;
+      color: #2d3748;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .header-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .report-header {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .report-header h2 {
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+    }
+
+    .report-header p {
+      color: #718096;
+    }
+
+    .filter-form {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .filter-form select {
+      padding: 0.5rem 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #4a5568;
+    }
+
+    .btn-secondary:hover {
+      background: #cbd5e0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-left: 4px solid #667eea;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .section {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .section h3 {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f7fafc;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: #4a5568;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background: #f7fafc;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .status-verified {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-unverified {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      .report-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1>Organization Report</h1>
+      <nav class="header-nav">
+        <a href="{% url 'admin_reports' %}">All Reports</a>
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <form method="post" action="{% url 'logout' %}" style="display: inline; margin: 0;">
+          {% csrf_token %}
+          <button type="submit" style="background: none; border: none; color: white; font-weight: 500; cursor: pointer; padding: 0; font-size: inherit; font-family: inherit;">Logout</button>
+        </form>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="report-header">
+      <div>
+        <h2>Organization Report</h2>
+        <p>Analyzing organization registrations and activity</p>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+        <form class="filter-form" method="get">
+          <select name="days" onchange="this.form.submit()">
+            <option value="7" {% if days == 7 %}selected{% endif %}>Last 7 days</option>
+            <option value="30" {% if days == 30 %}selected{% endif %}>Last 30 days</option>
+            <option value="90" {% if days == 90 %}selected{% endif %}>Last 90 days</option>
+            <option value="365" {% if days == 365 %}selected{% endif %}>Last year</option>
+          </select>
+        </form>
+        <a href="{% url 'export_organization_report_csv' %}" class="btn btn-secondary">Export CSV</a>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">{{ total_organizations }}</div>
+        <div class="stat-label">Total Organizations</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ new_organizations }}</div>
+        <div class="stat-label">New ({{ days }} days)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ verified_count }}</div>
+        <div class="stat-label">Verified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">{{ org_with_opportunities }}</div>
+        <div class="stat-label">With Opportunities</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="section">
+        <h3>Verification Status</h3>
+        <div class="chart-container">
+          <canvas id="verificationChart"></canvas>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Activity Overview</h3>
+        <div class="chart-container">
+          <canvas id="activityChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Most Active Organizations</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Organization</th>
+              <th>Username</th>
+              <th>Verified</th>
+              <th>Opportunities</th>
+              <th>Applications Received</th>
+              <th>Joined</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for org in active_organizations %}
+            <tr>
+              <td><strong>{{ forloop.counter }}</strong></td>
+              <td>
+                {% if org.organization_profile %}
+                  {{ org.organization_profile.organization_name }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>{{ org.username }}</td>
+              <td>
+                {% if org.organization_profile and org.organization_profile.verified %}
+                  <span class="status-badge status-verified">Verified</span>
+                {% else %}
+                  <span class="status-badge status-unverified">Unverified</span>
+                {% endif %}
+              </td>
+              <td>{{ org.opportunity_count }}</td>
+              <td>{{ org.application_count }}</td>
+              <td>{{ org.date_joined|date:"M d, Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="7" style="text-align: center; color: #718096;">No organizations found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Verification Status Chart
+    const verifiedCount = {{ verified_count }};
+    const unverifiedCount = {{ total_organizations }} - {{ verified_count }};
+
+    new Chart(document.getElementById('verificationChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Verified', 'Unverified'],
+        datasets: [{
+          data: [verifiedCount, unverifiedCount],
+          backgroundColor: ['#d1fae5', '#fef3c7'],
+          borderColor: ['#065f46', '#92400e'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Activity Overview Chart
+    const withOpportunities = {{ org_with_opportunities }};
+    const withoutOpportunities = {{ total_organizations }} - {{ org_with_opportunities }};
+
+    new Chart(document.getElementById('activityChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['With Opportunities', 'No Opportunities'],
+        datasets: [{
+          data: [withOpportunities, withoutOpportunities],
+          backgroundColor: ['#dbeafe', '#e2e8f0'],
+          borderColor: ['#1e40af', '#4a5568'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.views import home, volunteer_dashboard, organization_dashboard, admin_dashboard
+from django.conf import settings
+from django.conf.urls.static import static
+from core.views import (
+    home, volunteer_dashboard, organization_dashboard, admin_dashboard,
+    admin_reports, volunteer_activity_report, opportunity_report, organization_report,
+    export_volunteer_report_csv, export_opportunity_report_csv, export_organization_report_csv
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +31,19 @@ urlpatterns = [
     path('dashboard/volunteer/', volunteer_dashboard, name='volunteer_dashboard'),
     path('dashboard/organization/', organization_dashboard, name='organization_dashboard'),
     path('dashboard/admin/', admin_dashboard, name='admin_dashboard'),
+    # Admin Reports
+    path('dashboard/admin/reports/', admin_reports, name='admin_reports'),
+    path('dashboard/admin/reports/volunteers/', volunteer_activity_report, name='volunteer_activity_report'),
+    path('dashboard/admin/reports/opportunities/', opportunity_report, name='opportunity_report'),
+    path('dashboard/admin/reports/organizations/', organization_report, name='organization_report'),
+    # Report Exports
+    path('dashboard/admin/reports/volunteers/export/', export_volunteer_report_csv, name='export_volunteer_report_csv'),
+    path('dashboard/admin/reports/opportunities/export/', export_opportunity_report_csv, name='export_opportunity_report_csv'),
+    path('dashboard/admin/reports/organizations/export/', export_organization_report_csv, name='export_organization_report_csv'),
     path('', home, name='home'),
     path('resumes/', include('resumes.urls'))
 ]
+
+# Serve media files in development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
