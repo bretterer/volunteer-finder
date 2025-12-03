@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
     # Project apps
     'core',
     'accounts',
@@ -162,3 +163,8 @@ OPENAI_MAX_TOKENS = int(os.getenv('MAX_COMPLETION_TOKENS', 2100))
 
 # Scoring Configuration
 SCORING_THRESHOLD = 65  # Minimum score to consider
+
+CRONJOBS = [
+    ('0 9 * * MON', 'django.core.management.call_command', ['send_weekly_admin_reports']),
+]
+
